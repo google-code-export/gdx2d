@@ -1,5 +1,7 @@
 package hevs.gdx2d.lib;
 
+import javax.swing.ImageIcon;
+
 import hevs.gdx2d.lib.interfaces.GameInterface;
 import hevs.gdx2d.lib.interfaces.KeyboardInterface;
 import hevs.gdx2d.lib.interfaces.TouchInterface;
@@ -202,9 +204,10 @@ public abstract class PortableApplication implements TouchInterface,
 			config.vSyncEnabled = true; // Ignored under Linux						
 			config.foregroundFPS = 60;
 			config.backgroundFPS = 60;
-			config.samples = 2; // Multisampling enables anti-alias for lines
+			config.samples = 2; // Multi-sampling enables anti-alias for lines
 			config.addIcon("data/icon16.png", FileType.Internal);
-			config.addIcon("data/icon32.png", FileType.Internal); // FIXME: icon not showing properly on Ubuntu 10.04
+			config.addIcon("data/icon32.png", FileType.Internal);
+			config.addIcon("data/icon64.png", FileType.Internal); // FIXME: icon not showing properly on Ubuntu 10.04
 			theGame = new Game2D(this);			
 			LwjglApplication app = new LwjglApplication(theGame, config);
 		}			

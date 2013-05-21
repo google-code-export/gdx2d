@@ -1,5 +1,6 @@
-<wiki:toc max_depth="1" />
 #summary Table of contents
+
+<wiki:toc max_depth="2" />
 
   * [Introduction What is gdx2d]
   * [Install How to install the library]

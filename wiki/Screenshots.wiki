@@ -1,4 +1,4 @@
-#summary Some picture grabbing of what the library can do
+#summary Some picture demonstrating what the library can do. All those demos are available in the framework.
 
 == Scrolling ==
 https://gdx2d.googlecode.com/files/2.png

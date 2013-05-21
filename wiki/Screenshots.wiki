@@ -1,4 +1,12 @@
-#summary Some screenshots of what the library can do
+#summary Some picture grabbing of what the library can do
 
 == Scrolling ==
 https://gdx2d.googlecode.com/files/2.png
+
+== Multiple sprites ==
+https://gdx2d.googlecode.com/files/1.png
+https://gdx2d.googlecode.com/files/6.png
+
+== Physics simulation ==
+https://gdx2d.googlecode.com/files/7.png
+https://gdx2d.googlecode.com/files/3-4-5.png

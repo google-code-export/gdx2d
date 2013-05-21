@@ -31,6 +31,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
@@ -157,13 +158,18 @@ public class DemoSelector extends JFrame {
 		
 		private void createMenus(){
 			JMenuBar bar = new JMenuBar();			
-			ImageIcon icon = new ImageIcon(getClass().getResource("/retro-coin.png"));			
 			JMenu about = new JMenu("Help");
 			JMenuItem it = new JMenuItem("About");
 			it.addActionListener(new ActionListener() {			
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					
+					ImageIcon icon = new ImageIcon(getClass().getResource("/icon64.png"));
+					// TODO: add real link in dialog
+					JOptionPane.showMessageDialog(null,							
+						    "DemoSelector application for gdx2d lib\nPierre-André Mudry, 2013\nHES-SO Valais 2013",
+						    "About this application",
+						    JOptionPane.INFORMATION_MESSAGE,
+						    icon);
 				}
 			});
 			about.add(it);

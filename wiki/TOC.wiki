@@ -3,4 +3,5 @@
 <wiki:toc max_depth="2" />
 
   * [Introduction What is gdx2d]
-  * [Install Installing the library]
+     * [Presentation A nice presentation of the lib]
+     * [Install Installing the library]

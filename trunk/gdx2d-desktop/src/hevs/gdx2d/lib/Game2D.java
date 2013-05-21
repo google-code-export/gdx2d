@@ -200,6 +200,9 @@ public class Game2D implements ApplicationListener {
 		});
 
 		Gdx.input.setInputProcessor(multiplexer);
+
+		// Initialize app
+		app.onInit();
 		
 		// A fixed rate timer that schedules the application game updates
 		t = new Timer();
@@ -210,9 +213,6 @@ public class Game2D implements ApplicationListener {
 				app.onGameLogicUpdate();
 			}
 		}, 0, 1000 / logicRefreshFps);
-	
-		// Initialize app
-		app.onInit();
 	}
 
 	/**

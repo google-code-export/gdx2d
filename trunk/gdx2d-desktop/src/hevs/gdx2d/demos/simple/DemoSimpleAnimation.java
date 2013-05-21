@@ -6,14 +6,12 @@ import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
 
 /**
- * A very simple demonstration on how to 
- * display something animated with the library
+ * A very simple demonstration on how to display something animated with the library
  * 
  * @author Pierre-André Mudry (mui)
  * @version 1.0
  */
 public class DemoSimpleAnimation extends PortableApplication {
-
 	int radius = 5, speed = 1;
 	
 	public DemoSimpleAnimation(boolean onAndroid) {
@@ -22,6 +20,7 @@ public class DemoSimpleAnimation extends PortableApplication {
 
 	@Override
 	public void onInit() {
+		// Sets the window title
 		setTitle("Simple demo, mui 2013");
 	}
 
@@ -42,6 +41,10 @@ public class DemoSimpleAnimation extends PortableApplication {
 	}
 
 	public static void main(String[] args) {
+		/**
+		 * Note that the constructor parameter is used to determine if running on Android or not.
+		 * As we are in main there, it means we are on desktop computer.
+		 */
 		new DemoSimpleAnimation(false);
 	}
 

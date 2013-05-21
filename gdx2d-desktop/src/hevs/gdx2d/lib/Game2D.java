@@ -88,7 +88,10 @@ public class Game2D implements ApplicationListener {
 		shapeRenderer = new ShapeRenderer();
 		batch = new SpriteBatch();
 
-		app.onInit();
+		// Log level for the application
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.log("[GDX2Dlib]", "version " + Version.version);
+				
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.update();
@@ -207,10 +210,9 @@ public class Game2D implements ApplicationListener {
 				app.onGameLogicUpdate();
 			}
 		}, 0, 1000 / logicRefreshFps);
-		
-		// Log level for the application
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		Gdx.app.log("[GDX2Dlib]", "Version " + Version.version);
+	
+		// Initialize app
+		app.onInit();
 	}
 
 	/**

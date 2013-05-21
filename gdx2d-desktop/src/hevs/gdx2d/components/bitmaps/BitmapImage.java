@@ -1,0 +1,41 @@
+package hevs.gdx2d.components.bitmaps;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+/**
+ * An image encapsulation class for GDX2DLib.
+ * 
+ * TODO: loading each image in a texture is a bad idea but it works. Refactor this
+ * using http://steigert.blogspot.ch/search?updated-max=2012-03-15T18:29:00-03:00&max-results=3&start=3&by-date=false
+ * @author Nils Chatton (chn)
+ * @author Pierre-Andre Mudry (mui)
+ * @version 1.0
+ */
+public class BitmapImage {
+	
+	private Texture image;
+	private TextureRegion tRegion;
+	
+	public BitmapImage(String file) {
+		image = new Texture(Gdx.files.internal(file));
+		tRegion = new TextureRegion(image);
+		//image.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		//Utils.callCheck("hevs.gdx2d.lib.Game2D", "create");		
+	}
+
+	public Texture getImage() {
+		return image;
+	}
+
+	public TextureRegion getRegion() {
+		return tRegion;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {	
+		super.finalize();
+		image.dispose();
+	}
+}

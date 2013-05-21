@@ -1,10 +1,5 @@
 <wiki:toc max_depth="1" />
+#summary Table of contents
 
- * [Articles HOWTO articles]
-    * [ArticlesXSS Web security]
-    * [ArticlesDom DOM manipulation]
-    * [ArticlesStyle CSS and style]
-    * [ArticlesTips Tips and tricks]
-  * [DOMReference DOM reference]
-  * [HTMLElements HTML reference]
-  * [CSSReference CSS reference]
+  * [Introduction What is gdx2d]
+  * [Install How to install the library]

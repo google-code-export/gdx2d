@@ -5,3 +5,4 @@
   * [Introduction What is gdx2d]
      * [Presentation A nice presentation of the lib]
      * [Install Installing the library]
+  * [Screenshots Screenshots]

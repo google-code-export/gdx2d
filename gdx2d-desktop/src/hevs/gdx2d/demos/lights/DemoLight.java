@@ -155,7 +155,7 @@ public class DemoLight extends PortableApplication {
 	@Override
 	public void onGameLogicUpdate() {
 		synchronized (world) {
-			world.step(1 / 50f, 7, 3);	
+			world.step(1 / 60f, 7, 3);	
 		}					
 	}
 

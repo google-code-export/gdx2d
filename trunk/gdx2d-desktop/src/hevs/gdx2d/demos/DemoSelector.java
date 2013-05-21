@@ -47,7 +47,7 @@ import com.badlogic.gdx.files.FileHandle;
  * A demo selector class, most of the code taken from Libgdx own demo selector
  * 
  * @author Pierre-Andre Mudry (mui)
- * @version 1.1
+ * @version 1.11
  */
 @SuppressWarnings("serial")
 public class DemoSelector extends JFrame {

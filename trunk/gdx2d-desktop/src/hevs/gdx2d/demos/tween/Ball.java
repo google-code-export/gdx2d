@@ -5,8 +5,10 @@ import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.interfaces.DrawableObject;
 
 /**
- * A simple ball object that will be drawn
- * @author Pierre-Andre Mudry (mui) 
+ * A simple ball object that will be drawn with
+ * tweening.
+ * @author Pierre-André Mudry (mui)
+ * @version 1.0 
  */
 public class Ball implements DrawableObject{	
 	float posx, posy;

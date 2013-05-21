@@ -11,7 +11,7 @@ import com.badlogic.gdx.Gdx;
  * Demonstrates the usage of tweening for
  * animation.
  * 
- * @author Pierre-Andre Mudry (mui)
+ * @author Pierre-André Mudry (mui)
  * @version 1.1
  *
  */

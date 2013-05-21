@@ -2,6 +2,12 @@ package hevs.gdx2d.demos.tween;
 
 import aurelienribon.tweenengine.TweenAccessor;
 
+/**
+ * An accessor class for the modifying the parameters
+ * of the ball.
+ * @author Pierre-André Mudry (mui)
+ * @version 1.0
+ */
 class BallAccessor implements TweenAccessor<Ball> {
 
 	public static final int POSITION_X = 1;

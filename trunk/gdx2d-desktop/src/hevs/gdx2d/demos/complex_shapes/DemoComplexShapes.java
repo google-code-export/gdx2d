@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.Color;
  * is a complex demo, you should not start with this one.
  * 
  * @version 1.0, April 2013
- * @author <a href='mailto:mui@hevs.ch'>Pierre-André Mudry</a>, mui
+ * @author Pierre-André Mudry, mui
  */
 public class DemoComplexShapes extends PortableApplication {
 
@@ -33,7 +33,7 @@ public class DemoComplexShapes extends PortableApplication {
 	private type_shape shape_type = type_shape.CIRCLE;
 
 	// For the movement of objects
-	private double counter = 10, direction = 1.34;
+	private double counter = 10, dir = 1.34;
 
 	// The image which will be displayed
 	private BitmapImage imageBmp;
@@ -53,24 +53,6 @@ public class DemoComplexShapes extends PortableApplication {
 
 		for (int i = 0; i < 50; i++) {
 			colors.add(PaletteGenerator.RandomMix(a, b, c, 0.01f));
-		}
-	}
-
-	@Override
-	public void onKeyDown(int keycode) {
-		switch (keycode) {
-		case Input.Keys.PLUS:
-			generateObjects(100);
-			Gdx.app.log("Info", "N shapes " + shapes.size());
-			break;
-
-		case Input.Keys.MINUS:
-			
-			if(shapes.size() > 100){
-				Gdx.app.log("Info", "N shapes " + shapes.size());
-				destroyObjects(100);
-			}
-			break;
 		}
 	}
 
@@ -104,21 +86,20 @@ public class DemoComplexShapes extends PortableApplication {
 	public void onInit() {
 		fillPalette();	
 		
-		this.setTitle("Demo shapes, mui 2013");
-		imageBmp = new BitmapImage("data/Android_PI_48x48.png");
+		this.setTitle("Demo shapes, mui 2013");		
 		screenWidth = getWindowWidth();
 		screenHeight = getWindowHeight();
 		maxRadius = Math.min(getWindowHeight() / 2, getWindowWidth() / 2) - 10;
 
+		imageBmp = new BitmapImage("data/Android_PI_48x48.png");
 		generateObjects(N_SHAPES);
 	}
 
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
 		// Updates the counter for the position on screen
-		direction = counter > maxRadius || counter <= 5 ? direction *= -1
-				: direction;
-		counter += direction;
+		dir = counter > maxRadius || counter <= 5 ? dir *= -1 : dir;
+		counter += dir;
 
 		angle = angle >= 360 ? 0 : angle + 0.2f;
 
@@ -159,6 +140,23 @@ public class DemoComplexShapes extends PortableApplication {
 		g.drawFPS();
 	}
 
+	@Override
+	public void onKeyDown(int keycode) {
+		switch (keycode) {
+		case Input.Keys.PLUS:
+			generateObjects(100);
+			Gdx.app.log("Info", "N shapes " + shapes.size());
+			break;
+
+		case Input.Keys.MINUS:
+			if(shapes.size() > 100){
+				Gdx.app.log("Info", "N shapes " + shapes.size());
+				destroyObjects(100);
+			}
+			break;
+		}
+	}
+	
 	@Override
 	/**
 	 * Change shape on click

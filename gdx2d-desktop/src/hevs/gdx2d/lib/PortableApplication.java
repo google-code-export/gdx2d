@@ -1,7 +1,5 @@
 package hevs.gdx2d.lib;
 
-import javax.swing.ImageIcon;
-
 import hevs.gdx2d.lib.interfaces.GameInterface;
 import hevs.gdx2d.lib.interfaces.KeyboardInterface;
 import hevs.gdx2d.lib.interfaces.TouchInterface;
@@ -200,7 +198,7 @@ public abstract class PortableApplication implements TouchInterface,
 			config.height = height;
 			config.width = width;
 			config.fullscreen = false;
-			config.title = "INF1 Libgdx2D application";
+			config.title = "gdx2d application";
 			config.vSyncEnabled = true; // Ignored under Linux						
 			config.foregroundFPS = 60;
 			config.backgroundFPS = 60;

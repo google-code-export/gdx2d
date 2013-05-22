@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,12 +19,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
  * A game graphics implementation for LibGDX based on the
  * interface of FunGraphics for INF1 class
  * 
- * FIXME: sprites sheets
- * TODO: multiple screens 
- * 
+ * @author Pierre-André Mudry (mui)
  * @author Nils Chatton (chn)
- * @author Pierre-Andre Mudry (mui)
- * @version 1.1
+ * @version 1.12
  */
 public class GdxGraphics 
 {
@@ -43,12 +39,11 @@ public class GdxGraphics
 	protected BitmapFont font;
 
 	// For sprite-based circles
-	protected Pixmap pixmap;
-	protected Texture pixmaptex;
 	Sprite sprite;					
 	
 	// For sprite-based logo
-	final protected Texture logoBitmap;	
+	static final protected Texture logoTex = new Texture(Gdx.files.internal("data/logo_hes.png"));;	
+	static final protected Texture circleTex = new Texture(Gdx.files.internal("data/circle.png"));;
 	
 	public GdxGraphics(ShapeRenderer shapeRenderer2, SpriteBatch spriteBatch, OrthographicCamera camera) {
 		this.shapeRenderer = shapeRenderer2;
@@ -60,19 +55,13 @@ public class GdxGraphics
 		this.fixedcamera = new OrthographicCamera();
 		fixedcamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
+		// Enable alpha blending for shape rendere
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glEnable(GL10.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 			
 		// Create a default sprite for filled circles
-		pixmap = new Pixmap(128, 128, Format.RGBA8888);
-		pixmap.setColor(Color.WHITE);
-		pixmap.fillCircle(64, 64, 64);
-		pixmaptex = new Texture(pixmap);
-		sprite = new Sprite(pixmaptex, 0, 0, 128, 128);
-				
-		// Preload the school logo
-		logoBitmap = new Texture(Gdx.files.internal("data/logo_hes.png"));		
+		sprite = new Sprite(circleTex, 0, 0, 128, 128);
 	}
 
 	/**
@@ -91,7 +80,7 @@ public class GdxGraphics
 	public void drawSchoolLogo(){
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
 		spriteBatch.begin();
-			spriteBatch.draw(logoBitmap, getScreenWidth() - logoBitmap.getWidth(), 0);
+			spriteBatch.draw(logoTex, getScreenWidth() - logoTex.getWidth(), 0);
 		spriteBatch.end();		
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
@@ -105,7 +94,7 @@ public class GdxGraphics
 
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
 		spriteBatch.begin();
-			spriteBatch.draw(logoBitmap, width - logoBitmap.getWidth(), height - logoBitmap.getHeight());
+			spriteBatch.draw(logoTex, width - logoTex.getWidth(), height - logoTex.getHeight());
 		spriteBatch.end();
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
@@ -122,7 +111,7 @@ public class GdxGraphics
 
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
 		spriteBatch.begin();
-			spriteBatch.draw(logoBitmap, width - logoBitmap.getWidth(), height - logoBitmap.getHeight());
+			spriteBatch.draw(logoTex, width - logoTex.getWidth(), height - logoTex.getHeight());
 		spriteBatch.end();
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
@@ -146,73 +135,90 @@ public class GdxGraphics
 		return Gdx.graphics.getWidth();
 	}
 	
-	public void drawRectangle(int x, int y, int w, int h, int angle) {
+	public void drawRectangle(float x, float y, float w, float h, float angle) {
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(currentColor);
-		shapeRenderer.identity();
-		shapeRenderer.translate(x + w / 2, y + w / 2, 0);
-		shapeRenderer.rotate(0, 0, 1, angle);
-		shapeRenderer.rect(-w / 2, -w / 2, w, h);
+			shapeRenderer.setColor(currentColor);
+			shapeRenderer.identity();
+			shapeRenderer.translate(x + w / 2, y + w / 2, 0);
+			shapeRenderer.rotate(0, 0, 1, angle);
+			shapeRenderer.rect(-w / 2, -w / 2, w, h);
 		shapeRenderer.end();
 	}
 
+	/**
+	 * Clears the screen black
+	 */
 	public void clear() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
 
+	/**
+	 * Clears the screen with a given color
+	 * @param c
+	 */
 	public void clear(Color c) {
 		Gdx.gl.glClearColor(c.r, c.g, c.b, c.a);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
 
+	/**
+	 * Sets the current color used for graphics drawing
+	 * @param c
+	 */
 	public void setColor(Color c) {
 		currentColor = c;
 	}
 
-	public void setPixel(int x, int y) {
+	/**
+	 * Sets the color of a pixel using the current color ({@link #currentColor}
+	 * @param x
+	 * @param y
+	 */
+	public void setPixel(float x, float y) {
 		shapeRenderer.begin(ShapeType.Point);
 		shapeRenderer.identity();
-		shapeRenderer.setColor(currentColor);
-		shapeRenderer.point(x, y, 0);
+			shapeRenderer.setColor(currentColor);
+			shapeRenderer.point(x, y, 0);
 		shapeRenderer.end();
 	}
 
-	public void setPixel(int x, int y, Color c) {
+	/**
+	 * Sets the color of a pixel using a color
+	 * @param x
+	 * @param y
+	 * @param c
+	 */
+	public void setPixel(float x, float y, Color c) {
 		shapeRenderer.begin(ShapeType.Point);
 		shapeRenderer.identity();
-		shapeRenderer.setColor(c);
-		shapeRenderer.point(x, y, 0);
+			shapeRenderer.setColor(c);
+			shapeRenderer.point(x, y, 0);
 		shapeRenderer.end();
 	}
 		
-	public void clearPixel(int x, int y) {
+	public void clearPixel(float x, float y) {
 		shapeRenderer.begin(ShapeType.Point);
-		shapeRenderer.identity();
-		shapeRenderer.setColor(backGroundColor);
-		shapeRenderer.point(x, y, 0);
+			shapeRenderer.identity();
+			shapeRenderer.setColor(backGroundColor);
+			shapeRenderer.point(x, y, 0);
 		shapeRenderer.end();
 	}
 
-	public void drawLine(int p1x, int p1y, int p2x, int p2y) {
+	public void drawLine(float p1x, float p1y, float p2x, float p2y) {
 		shapeRenderer.begin(ShapeType.Line);		
-		shapeRenderer.identity();
-		shapeRenderer.setColor(currentColor);
-		shapeRenderer.line(p1x, p1y, p2x, p2y);
+			shapeRenderer.identity();
+			shapeRenderer.setColor(currentColor);
+			shapeRenderer.line(p1x, p1y, p2x, p2y);
 		shapeRenderer.end();
 	}
 
-	public void drawLine(int p1x, int p1y, int p2x, int p2y, Color c) {
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.identity();
+	public void drawLine(float p1x, float p1y, float p2x, float p2y, Color c) {
 		shapeRenderer.setColor(c);
-		shapeRenderer.line(p1x, p1y, p2x, p2y);
-		shapeRenderer.end();
+		drawLine(p1x, p1y, p2x, p2y);		
 	}
 
-	public void drawFilledRectangle(int x, int y, int w, int h, int angle, Color c) {
-		shapeRenderer.setColor(c);
-		
+	public void drawFilledRectangle(float x, float y, float w, float h, float angle) {
 		shapeRenderer.begin(ShapeType.Filled);
 			shapeRenderer.identity();			
 			shapeRenderer.translate(x + w / 2, y + w / 2, 0);
@@ -220,16 +226,25 @@ public class GdxGraphics
 			shapeRenderer.rect(-w / 2, -w / 2, w, h);		
 		shapeRenderer.end();
 	}
+	
+	public void drawFilledRectangle(float x, float y, float w, float h, float angle, Color c) {
+		shapeRenderer.setColor(c);		
+		drawFilledRectangle(x, y, w, h, angle);
+	}
 
-	public void drawCircle(int centerX, int centerY, int radius) {
+	public void drawCircle(float centerX, float centerY, float radius, Color c) {
+		shapeRenderer.setColor(c);
+		drawCircle(centerX, centerY, radius);
+	}
+	
+	public void drawCircle(float centerX, float centerY, float radius) {
 		shapeRenderer.begin(ShapeType.Line);		
-			shapeRenderer.setColor(currentColor);
 			shapeRenderer.identity();		
 			shapeRenderer.circle(centerX, centerY, radius);
 		shapeRenderer.end();		
 	}
 
-	public void drawFilledCircle(int centerX, int centerY, int radius, Color c) {		
+	public void drawFilledCircle(float centerX, float centerY, float radius, Color c) {		
 		if(radius > 64)
 		{
 			shapeRenderer.begin(ShapeType.Filled);
@@ -250,14 +265,14 @@ public class GdxGraphics
 		}
 	}
 
-	public void drawString(int posX, int posY, String str) {
+	public void drawString(float posX, float posY, String str) {
 		spriteBatch.begin();		
 			font.drawMultiLine(spriteBatch, str, posX, posY);
 		spriteBatch.end();
 	}
 
-	public void drawString(int posX, int posY, String str, Color color, int size) {
-		// FIXME This is ugly (scaling does not work properly, should use another texture per size)
+	public void drawString(float posX, float posY, String str, Color color, float size) {
+		// FIXME Scaling does not work properly, should use another texture per size
 		spriteBatch.begin();
 			font.setScale(size);		
 			font.setColor(color);		
@@ -272,7 +287,7 @@ public class GdxGraphics
 	 * @param i
 	 * @param j
 	 */
-	public void drawBackground(BitmapImage t, int i, int j){
+	public void drawBackground(BitmapImage t, float i, float j){
 		drawBackground(t.getImage(), i, j);
 	}
 	
@@ -282,7 +297,7 @@ public class GdxGraphics
 	 * @param i
 	 * @param j
 	 */
-	public void drawBackground(Texture t, int i, int j){
+	public void drawBackground(Texture t, float i, float j){
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
 		
 		spriteBatch.begin();		
@@ -332,7 +347,7 @@ public class GdxGraphics
 	}
 	
 	/**
-	 * Draws a picture at position ({@code posX, posY}) with a fixed width and height (not the one of the {@link BitmapImage} itself
+	 * Draws a picture at position ({@code posX, posY}) with a fixed width and height (not the one of the {@link BitmapImage} itself).
 	 */
 	public void drawTransformedPicture(float posX, float posY, float angle, float width, float height, BitmapImage bitmap) {
 		spriteBatch.begin();
@@ -342,7 +357,7 @@ public class GdxGraphics
 	
 	/**
 	 * Draws a picture at position ({@code posX, posY}) with a selectable center of rotation which is located
-	 * at position ({@code centerX, centerY}).
+	 * at position offset by ({@code centerX, centerY}).
 	 * 
 	 * @param posX
 	 * @param posY

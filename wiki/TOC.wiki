@@ -6,3 +6,4 @@
      * [Presentation A nice presentation of the lib]
      * [Install Installing the library]
   * [Screenshots Screenshots]
+  * [Improvements Future things we are working on]

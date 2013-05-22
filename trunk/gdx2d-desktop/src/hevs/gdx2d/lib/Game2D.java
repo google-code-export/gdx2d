@@ -220,7 +220,6 @@ public class Game2D implements ApplicationListener {
 	 */
 	@Override
 	public void render() {
-		
 		app.onGraphicRender(g);
 	}
 

@@ -114,7 +114,7 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 		
 		// Destroy the shape because we don't need it anymore (JNI side)
 		s.dispose();
-		body.setUserData(this);
+		body.setUserData(this);		
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	 * @param body
 	 * @param energy
 	 */
-	public void collision(AbstractPhysicsObject a, AbstractPhysicsObject b, float energy){				
+	public void collision(AbstractPhysicsObject theOtherObject, float energy){				
 	}
 	
 	@Override
@@ -184,11 +184,9 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 		if(!ob1.equals(this) && !ob2.equals(this))
 			return;
 		
-		if(ob1.equals(this)){
-			collision(ob1, ob2, impulse.getNormalImpulses()[0]);
-		}
-		else
-			collision(ob2, ob1, impulse.getNormalImpulses()[0]);
+		float energy = impulse.getNormalImpulses()[0];
+		ob1.collision(ob2, energy);
+		ob2.collision(ob1, energy);
 	}
 	
 	@Override

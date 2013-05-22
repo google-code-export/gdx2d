@@ -8,7 +8,6 @@ import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.interfaces.DrawableObject;
 
 public class Spaceship implements DrawableObject {
-	// The box that contains the simulatable body
 	PhysicsBox box = null;
 	
 	// Motor related
@@ -16,7 +15,8 @@ public class Spaceship implements DrawableObject {
 	int thrustUp = 0;
 	
 	// Drawing related
-	final static BitmapImage image = new BitmapImage("data/rocket_128.png");
+	final static BitmapImage shipImage = new BitmapImage("data/rocket_128.png");
+	final static BitmapImage flameImage = new BitmapImage("data/flame.png");
 	final float RAD2DEG = 57.2957795f;
 
 	public Spaceship(Vector2 position) {
@@ -27,22 +27,36 @@ public class Spaceship implements DrawableObject {
 
 	@Override
 	public void draw(GdxGraphics g) {
+		// Positions to apply torque (NOT USED AT THE MOMENT)
 		Vector2 leftT = box.body.getPosition();
 		leftT.add(-5, -5);
 		Vector2 rightT = box.body.getPosition();
 		rightT.add(5, 5);
 
+		// Make the ship turn if required
 		if (thrustLeft)
 			box.body.applyTorque(1200000, true);
 		if (thrustRight)
 			box.body.applyTorque(-1200000, true);
 
+		// Let's move the ship with a force
 		box.body.applyForceToCenter((float) Math.cos(box.body.getAngle()) * thrustUp,
 				(float) Math.sin(box.body.getAngle()) * thrustUp, true);
 
-		g.drawTransformedPicture((int) box.body.getPosition().x,
-				(int) box.body.getPosition().y,
-				(float) box.body.getAngle() * RAD2DEG, .5f, image);
+		// Draw the ship
+		g.drawTransformedPicture(box.body.getPosition().x,
+				box.body.getPosition().y,
+				box.body.getAngle() * RAD2DEG, .5f, shipImage);
+		
+		// Draw the flame
+		if(thrustUp > 1000)
+			
+		g.drawTransformedPicture(
+				box.body.getPosition().x+50,
+				box.body.getPosition().y,
+//				box.body.getPosition().x,
+//				box.body.getPosition().y,
+				box.body.getAngle() * RAD2DEG, .2f*thrustUp/100000.0f, flameImage);
 	}
 
 }

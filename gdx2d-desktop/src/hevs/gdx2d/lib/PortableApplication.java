@@ -14,16 +14,19 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * The class that should be implemented for a game
+ * The base class that should be sub-classed by all
+ * gdx2d applications. To get the functionalities you simply have
+ * to overload the methods you need.
  * 
  * @author Pierre-André Mudry (mui)
- * @version 1.0
+ * @version 1.01
  */
 public abstract class PortableApplication implements TouchInterface,
 		KeyboardInterface, GameInterface {
 
 	protected boolean onAndroid;
 	private Game2D theGame;
+	
 	
 	/**
 	 * Changes the title of the window (Desktop only)
@@ -212,7 +215,7 @@ public abstract class PortableApplication implements TouchInterface,
 	}
 
 	/**
-	 * Creates an application using GDX2D
+	 * Creates an application using gdx2d
 	 * @param onAndroid True if running on Android
 	 */
 	public PortableApplication(boolean onAndroid) {

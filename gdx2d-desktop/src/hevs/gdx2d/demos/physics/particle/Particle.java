@@ -41,7 +41,7 @@ public class Particle extends PhysicsBox {
 	}
 
 	public void render(GdxGraphics g) {
-		// Make a nice blending rendering
+		// TODO Make a nice blending rendering
 		Color col = g.spriteBatch.getColor();
 		g.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
 		g.spriteBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f- age / (float) (maxAge+10));		

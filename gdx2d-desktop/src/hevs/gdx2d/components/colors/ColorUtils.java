@@ -1,5 +1,7 @@
 package hevs.gdx2d.components.colors;
 
+import javax.swing.text.rtf.RTFEditorKit;
+
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -11,6 +13,10 @@ import com.badlogic.gdx.graphics.Color;
  * @version 1.0 
  */
 public class ColorUtils {	
+	public static Color hsvToColor(float hue, float saturation, float value) {
+		return intToColor(hsvToRgb(hue, saturation, value));
+	}
+	
 	public static int hsvToRgb(float hue, float saturation, float value) {
 
 	    int h = (int)(hue * 6);

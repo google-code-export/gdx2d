@@ -53,12 +53,12 @@ public class DemoParticlePhysics extends PortableApplication {
 				Body p = it.next();
 
 				if (p.getUserData() instanceof Particle) {
-					Particle thep = (Particle) p.getUserData();
-					thep.step();
-					thep.render(g);
+					Particle particle = (Particle) p.getUserData();
+					particle.step();
+					particle.render(g);
 
-					if(thep.shouldbeDestroyed()){
-						toBeRemoved.add(thep);
+					if(particle.shouldbeDestroyed()){
+						toBeRemoved.add(particle);
 					}
 				}
 			}

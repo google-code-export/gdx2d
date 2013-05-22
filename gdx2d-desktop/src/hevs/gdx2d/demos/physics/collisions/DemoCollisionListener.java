@@ -17,7 +17,10 @@ import com.badlogic.gdx.physics.box2d.World;
 public class DemoCollisionListener extends PortableApplication{	
 	World world = PhysicsWorld.getInstance();	
 	Box2DDebugRenderer dbgRenderer;	
+	
 	int time = 0;
+	
+	BumpyBall b1, b2, b3, b4; 
 	
 	@Override
 	public void onInit() {
@@ -26,11 +29,11 @@ public class DemoCollisionListener extends PortableApplication{
 		
 		new PhysicsScreenBoundaries(getWindowWidth(), getWindowHeight());
 		
-		// A Ball has redefined its collision method.
-		Ball b = new Ball("ball 1", new Vector2(100, 250), 30);
+		// A BumpyBall has redefined its collision method.
+		b1 = new BumpyBall("ball 1", new Vector2(100, 250), 30);
 		
 		// Indicate that the ball should be informed for collisions
-		b.enableCollisionListener();			
+		b1.enableCollisionListener();			
 	};
 	
 	@Override
@@ -38,13 +41,38 @@ public class DemoCollisionListener extends PortableApplication{
 		g.clear();
 		
 		synchronized (world) {
-			dbgRenderer.render(world, g.getCamera().combined);
+//			dbgRenderer.render(world, g.getCamera().combined);			
+			b1.draw(g);
 			
-			// After some time, add another ball
-			if(time == 200)
-				new Ball("ball 2", new Vector2(100, 250), 40).enableCollisionListener();
+			if(b2 != null)
+				b2.draw(g);
+			
+			if(b3 != null)
+				b3.draw(g);
+			
+			if(b4 != null)
+				b4.draw(g);
+			
+			
+			// Add balls from time to time
+			if(time == 100){
+				b2 = new BumpyBall("ball 2", new Vector2(105, 300), 40);
+				b2.enableCollisionListener();
+			}
+			
+			if(time == 150){
+				b3 = new BumpyBall("ball 3", new Vector2(120, 300), 20);
+				b3.enableCollisionListener();
+			}
+			
+			if(time == 200){
+				b4 = new BumpyBall("ball 4", new Vector2(130, 310), 30);
+				b4.enableCollisionListener();
+			}
 		}		
 		
+		g.drawSchoolLogoUpperRight();
+		g.drawFPS();
 		time++;				
 	}
 	

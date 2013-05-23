@@ -45,65 +45,52 @@ public class DemoParticlePhysics extends PortableApplication {
 	public void onGraphicRender(GdxGraphics g) {
 		g.clear();
  
-		synchronized (w) {			
-			Vector<Particle> toBeRemoved = new Vector<Particle>();
-			Iterator<Body> it = w.getBodies();
+		Vector<Particle> toBeRemoved = new Vector<Particle>();
+		Iterator<Body> it = w.getBodies();
 
-			while (it.hasNext()) {
-				Body p = it.next();
+		while (it.hasNext()) {
+			Body p = it.next();
 
-				if (p.getUserData() instanceof Particle) {
-					Particle particle = (Particle) p.getUserData();
-					particle.step();
-					particle.render(g);
+			if (p.getUserData() instanceof Particle) {
+				Particle particle = (Particle) p.getUserData();
+				particle.step();
+				particle.render(g);
 
-					if(particle.shouldbeDestroyed()){
-						toBeRemoved.add(particle);
-					}
+				if(particle.shouldbeDestroyed()){
+					toBeRemoved.add(particle);
 				}
 			}
-
-			// Destroy the particles from the world
-			for (Particle particle : toBeRemoved) {
-				particle.destroy();
-			}
-
-			// Remove the particles that shall be destroyed
-			toBeRemoved.clear();
-
-			if (mouseActive)
-				createParticles();
-			
-			//dbgRenderer.render(world, g.getCamera().combined);
 		}
+
+		// Destroy the particles from the world
+		for (Particle particle : toBeRemoved) {
+			particle.destroy();
+		}
+
+		// Remove the particles that shall be destroyed
+		toBeRemoved.clear();
+
+		if (mouseActive)
+			createParticles();
+			
+		//dbgRenderer.render(world, g.getCamera().combined);
+		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 		
 		g.drawSchoolLogo();
 		g.drawFPS();
 	}
 
-	@Override
-	public void onGameLogicUpdate() {
-		super.onGameLogicUpdate();
-
-		synchronized (w) {
-			w.step(1 / 60.0f, 6, 5);
-		}
-
-	}
-
-	void createParticles() {
-		Random rand = new Random();
-
-		synchronized (w) {
-			for(int i = 0; i < CREATION_RATE; i++){
-				Particle c = new Particle(position, 5, MAX_AGE + rand.nextInt(MAX_AGE / 2));
-				
-				// Apply a vertical force with some random horizontal component
-				Vector2 force = new Vector2();			
-				force.x = rand.nextFloat() * 150 * (rand.nextBoolean() == true ? -1 : 1);
-				force.y = rand.nextFloat() * 150 * (rand.nextBoolean() == true ? -1 : 1);
-				c.body.applyLinearImpulse(force, position, true);
-			}
+	static final Random rand = new Random();
+	
+	void createParticles() {		
+		for(int i = 0; i < CREATION_RATE; i++){
+			Particle c = new Particle(position, 5, MAX_AGE + rand.nextInt(MAX_AGE / 2));
+			
+			// Apply a vertical force with some random horizontal component
+			Vector2 force = new Vector2();			
+			force.x = rand.nextFloat() * 150 * (rand.nextBoolean() == true ? -1 : 1);
+			force.y = rand.nextFloat() * 150 * (rand.nextBoolean() == true ? -1 : 1);
+			c.body.applyLinearImpulse(force, position, true);
 		}
 	}
 	

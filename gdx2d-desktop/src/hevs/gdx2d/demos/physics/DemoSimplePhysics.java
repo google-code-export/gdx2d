@@ -2,11 +2,13 @@ package hevs.gdx2d.demos.physics;
 
 import hevs.gdx2d.components.physics.PhysicsBox;
 import hevs.gdx2d.components.physics.PhysicsStaticBox;
+import hevs.gdx2d.components.physics.utils.PhysicsConstants;
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
 import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -57,29 +59,18 @@ public class DemoSimplePhysics extends PortableApplication{
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
 		g.clear();
-				
+		
 		/**
 		 *  The synchronized primitive is required because we use an object in two
 		 *  different threads
 		 */		
-		synchronized (world) {
-			debugRenderer.render(world, g.getCamera().combined);	
-		}
-	
+		debugRenderer.render(world, g.getCamera().combined);
+		PhysicsWorld.updatePhysics(Gdx.graphics.getRawDeltaTime());		
+		
 		g.drawSchoolLogoUpperRight();
 		g.drawFPS();
 	}	
 
-	@Override
-	public void onGameLogicUpdate() {
-		/**
-		 *  The synchronized primitive is required because we use an object in two
-		 *  different threads
-		 */
-		synchronized (world) {
-			world.step(1/60.0f, 7, 5);	
-		}		
-	}
 	
 	public static void main(String[] args) {
 		new DemoSimplePhysics(false);

@@ -1,9 +1,11 @@
 package hevs.gdx2d.demos.physics;
 
 import hevs.gdx2d.components.bitmaps.BitmapImage;
+import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
 
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.badlogic.gdx.Gdx;
@@ -31,7 +33,7 @@ public class DemoPhysicsBalls extends PortableApplication {
 	ConcurrentLinkedQueue<Body> list = new ConcurrentLinkedQueue<Body>();	
 	
 	// A world with gravity, pointing down
-	World world = new World(new Vector2(0, -10), true);
+	World world = PhysicsWorld.getInstance();
 	Box2DDebugRenderer debugRenderer;
 	BitmapImage img;
 
@@ -45,9 +47,11 @@ public class DemoPhysicsBalls extends PortableApplication {
 	}
 
 	@Override
-	public void onInit() {	
+	public void onInit() {			
 		setTitle("Physics demo with box2d, mui 2013");
 		hasAccelerometers = Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer);
+		
+		world.setGravity(new Vector2(0, -15));
 		
 		// Create the ground
 		BodyDef groundBodyDef = new BodyDef();
@@ -99,8 +103,8 @@ public class DemoPhysicsBalls extends PortableApplication {
 		dynamicCircle.setRadius(size);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = dynamicCircle;
-		fixtureDef.density = 2.5f;
-		fixtureDef.friction = 0.7f;
+		fixtureDef.density = 5.5f;
+		fixtureDef.friction = 0.5f;
 		fixtureDef.restitution = 0.75f;
 
 		// Add the ball to the worlds
@@ -116,10 +120,8 @@ public class DemoPhysicsBalls extends PortableApplication {
 	public void onClick(int x, int y, int button) {
 		super.onClick(x, y, button);
 
-		synchronized (this) {
-			if (button == Input.Buttons.LEFT)
-				addBall(x, y);			
-		}
+		if (button == Input.Buttons.LEFT)
+			addBall(x, y);			
 	}
 
 	@Override
@@ -135,11 +137,8 @@ public class DemoPhysicsBalls extends PortableApplication {
 			list.add(b);			
 		}
 
-		// Uncomment this for detailed rendering on box2d
-//		synchronized (this) {
-//			debugRenderer.render(world, g.getCamera().combined);			
-//		}
-
+		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
+		
 		g.drawSchoolLogoUpperRight();
 		g.drawFPS();
 	}
@@ -153,26 +152,21 @@ public class DemoPhysicsBalls extends PortableApplication {
 	 */
 	@Override
 	public void onGameLogicUpdate() {		
-		
-		synchronized (this) {						
-			if(hasAccelerometers){
-				// On tablet, orientation is different than on phone
-				Orientation nativeOrientation = Gdx.input.getNativeOrientation();
-				
-				float accel;
-				
-				if(nativeOrientation == Orientation.Landscape)
-					accel = -Gdx.input.getAccelerometerY();
-				else
-					accel = Gdx.input.getAccelerometerX();																			
-				
-				// Low pass filtering of the value
-				smoothedValue += (accel - smoothedValue) / SMOOTHING;
-				world.setGravity(new Vector2(-(float)(smoothedValue), -10));				
-			}
+	
+		if(hasAccelerometers){
+			// On tablet, orientation is different than on phone
+			Orientation nativeOrientation = Gdx.input.getNativeOrientation();
 			
-			// Make the physics work by stepping into time
-			world.step(1 / 50.0f, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
+			float accel;
+			
+			if(nativeOrientation == Orientation.Landscape)
+				accel = -Gdx.input.getAccelerometerY();
+			else
+				accel = Gdx.input.getAccelerometerX();																			
+			
+			// Low pass filtering of the value
+			smoothedValue += (accel - smoothedValue) / SMOOTHING;
+			world.setGravity(new Vector2(-(float)(smoothedValue), -10));				
 		}
 	}
 

@@ -1,6 +1,7 @@
 package hevs.androidgame;
 
 import hevs.gdx2d.demos.image_drawing.DemoSimpleImage;
+import hevs.gdx2d.demos.physics.DemoPhysicsBalls;
 import hevs.gdx2d.lib.Game2D;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -24,6 +25,6 @@ public class GameActivity extends AndroidApplication {
 		// Force orientation portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
-		initialize(new Game2D(new DemoSimpleImage(true)), true);					
+		initialize(new Game2D(new DemoPhysicsBalls(true)), true);					
 	}		
 }

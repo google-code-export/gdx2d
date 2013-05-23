@@ -133,7 +133,6 @@ public class DemoSelector extends JFrame {
 		tests.put("Physics soccer ball", "physics.DemoPhysicsBalls");
 		tests.put("Physics mouse interactions", "physics.DemoPhysicsMouse");
 		tests.put("Physics collision detection", "physics.collisions.DemoCollisionListener");
-		tests.put("Physics rocket", "physics.rocket.DemoPhysicsRocket"); // FIXME : ain't working ?
 		tests.put("Particles", "physics.particle.DemoParticlePhysics");
 		tests.put("Lights", "lights.DemoLight");
 		

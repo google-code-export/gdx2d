@@ -3,6 +3,7 @@ package hevs.gdx2d.demos.physics;
 import hevs.gdx2d.components.physics.PhysicsBox;
 import hevs.gdx2d.components.physics.PhysicsCircle;
 import hevs.gdx2d.components.physics.PhysicsStaticBox;
+import hevs.gdx2d.components.physics.utils.PhysicsConstants;
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
 import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
@@ -10,6 +11,7 @@ import hevs.gdx2d.lib.PortableApplication;
 
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -68,14 +70,13 @@ public class DemoPhysicsMouse extends PortableApplication {
 		debugRenderer.setDrawJoints(true);
 		debugRenderer.setDrawContacts(true);
 	}
-
+		
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
 		g.clear();
-
-		synchronized (world) {
-			debugRenderer.render(world, g.getCamera().combined);	
-		}		
+		debugRenderer.render(world, g.getCamera().combined);	
+		
+		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 		
 		g.drawSchoolLogoUpperRight();
 		g.drawFPS();
@@ -124,10 +125,8 @@ public class DemoPhysicsMouse extends PortableApplication {
 	public void onRelease(int x, int y, int button) {
 		// if a mouse joint exists we simply destroy it
 		if (mouseJoint != null) {
-			synchronized (world) {
-				world.destroyJoint(mouseJoint);
-				mouseJoint = null;	
-			}			
+			world.destroyJoint(mouseJoint);
+			mouseJoint = null;	
 		}
 	}
 
@@ -159,19 +158,10 @@ public class DemoPhysicsMouse extends PortableApplication {
 			def.target.set(testPoint.x, testPoint.y);
 			def.maxForce = 1000.0f * hitBody.getMass();
 
-			synchronized(world){
-				mouseJoint = (MouseJoint) world.createJoint(def);
-				hitBody.setAwake(true);
-			}
+			mouseJoint = (MouseJoint) world.createJoint(def);
+			hitBody.setAwake(true);
 		}
 		return;
-	}
-
-	@Override
-	public void onGameLogicUpdate() {
-		synchronized (world) {
-			world.step(1 / 60.0f, 7, 7);	
-		}		
 	}
 
 	@Override

@@ -111,17 +111,18 @@ public class DemoLight extends PortableApplication {
 		g.clear();
 	
 		// Draw all the lights
-		synchronized (world) {
-//			debugRenderer.render(world, g.getCamera().combined);
+//		debugRenderer.render(world, g.getCamera().combined);
 			
-			// Render the blue spheres
-			for (Body b : list) {																		
-				g.drawFilledCircle((int)b.getPosition().x, (int)b.getPosition().y, 12, Color.BLUE);
-			}
-			
-			// Render the lights
-			rayHandler.updateAndRender();					
+		// Render the blue spheres
+		for (Body b : list) {																		
+			g.drawFilledCircle((int)b.getPosition().x, (int)b.getPosition().y, 12, Color.BLUE);
 		}
+			
+		// Render the lights
+		rayHandler.updateAndRender();
+		
+		// Update the physics
+		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 		
 		g.drawSchoolLogo();
 		g.drawFPS();				
@@ -152,12 +153,6 @@ public class DemoLight extends PortableApplication {
 		p.setActive(false);
 	}
 
-	@Override
-	public void onGameLogicUpdate() {
-		synchronized (world) {
-			world.step(1 / 60f, 7, 3);	
-		}					
-	}
 
 	/**
 	 * @param args

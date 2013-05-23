@@ -24,6 +24,18 @@ public class PhysicsWorld {
 		return instance;		
 	}
 	
+	private static float accumulator;
+	private static float step = 1/60f;	
+	
+	static public void updatePhysics(float dt){
+	   accumulator+=dt;
+
+	   while(accumulator>=step){
+		  instance.step(step,8,6);		  
+	      accumulator -= step / 10f;	      
+	   }
+	}
+	
 	/**
 	 * To destroy it (required for JNI calls)
 	 */

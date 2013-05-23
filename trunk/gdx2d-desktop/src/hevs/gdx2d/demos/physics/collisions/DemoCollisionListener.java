@@ -5,6 +5,7 @@ import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -69,18 +70,13 @@ public class DemoCollisionListener extends PortableApplication{
 				b4 = new BumpyBall("ball 4", new Vector2(130, 310), 30);
 				b4.enableCollisionListener();
 			}
-		}		
+		}
+		
+		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 		
 		g.drawSchoolLogoUpperRight();
 		g.drawFPS();
 		time++;				
-	}
-	
-	@Override
-	public void onGameLogicUpdate() {	
-		synchronized (world) {
-			world.step(1/50f, 6, 4);			
-		}
 	}
 	
 	public DemoCollisionListener(boolean onAndroid){

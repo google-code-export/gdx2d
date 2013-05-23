@@ -7,6 +7,7 @@ import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
 import hevs.gdx2d.lib.utils.Logger;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -49,10 +50,8 @@ public class DemoPhysicsRocket extends PortableApplication {
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
 		g.clear();
-
-		synchronized (world) {
-			dbgRenderer.render(world, g.getCamera().combined);
-		}
+		dbgRenderer.render(world, g.getCamera().combined);
+		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 
 		ship.draw(g);
 	}
@@ -90,13 +89,6 @@ public class DemoPhysicsRocket extends PortableApplication {
 
 		default:
 			break;
-		}
-	}
-
-	@Override
-	public void onGameLogicUpdate() {
-		synchronized (world) {
-			world.step(1 / 60f, 7, 7);
 		}
 	}
 

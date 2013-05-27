@@ -180,10 +180,6 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 		ob1 = (AbstractPhysicsObject) contact.getFixtureA().getBody().getUserData();
 		ob2 = (AbstractPhysicsObject) contact.getFixtureB().getBody().getUserData();
 		
-		// We are only interested in our collisions
-		if(!ob1.equals(this) && !ob2.equals(this))
-			return;
-		
 		float energy = impulse.getNormalImpulses()[0];
 		ob1.collision(ob2, energy);
 		ob2.collision(ob1, energy);

@@ -2,6 +2,7 @@ package hevs.gdx2d.components.bitmaps;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -10,8 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * TODO: loading each image in a texture is a bad idea but it works. Refactor this
  * using http://steigert.blogspot.ch/search?updated-max=2012-03-15T18:29:00-03:00&max-results=3&start=3&by-date=false
  * @author Nils Chatton (chn)
- * @author Pierre-Andre Mudry (mui)
- * @version 1.0
+ * @author Pierre-André Mudry (mui)
+ * 
+ * @version 1.1
  */
 public class BitmapImage {
 	
@@ -21,7 +23,7 @@ public class BitmapImage {
 	public BitmapImage(String file) {
 		image = new Texture(Gdx.files.internal(file));
 		tRegion = new TextureRegion(image);
-		//image.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		image.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);		
 		//Utils.callCheck("hevs.gdx2d.lib.Game2D", "create");		
 	}
 
@@ -33,6 +35,20 @@ public class BitmapImage {
 		return tRegion;
 	}
 
+	/**
+	 * Mirrors the image left right
+	 */
+	public void mirrorLeftRight(){
+		tRegion.flip(true, false);		
+	}
+	
+	/**
+	 * Mirrors the image up down
+	 */
+	public void mirrorUpDown(){
+		tRegion.flip(false, true);
+	}
+	
 	@Override
 	protected void finalize() throws Throwable {	
 		super.finalize();

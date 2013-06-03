@@ -1,5 +1,6 @@
 package hevs.gdx2d.lib;
 
+import hevs.gdx2d.demos.DemoSelector;
 import hevs.gdx2d.lib.interfaces.GameInterface;
 import hevs.gdx2d.lib.interfaces.KeyboardInterface;
 import hevs.gdx2d.lib.interfaces.TouchInterface;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;

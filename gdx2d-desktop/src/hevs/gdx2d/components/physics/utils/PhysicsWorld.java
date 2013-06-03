@@ -31,7 +31,7 @@ public class PhysicsWorld {
 	   accumulator+=dt;
 
 	   while(accumulator>=step){
-		  instance.step(step,8,6);		  
+		  instance.step(step,6,6);		  
 	      accumulator -= step / 10f;	      
 	   }
 	}

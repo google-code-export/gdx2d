@@ -49,14 +49,14 @@ public class Spaceship implements DrawableObject {
 				box.body.getAngle() * RAD2DEG, .5f, shipImage);
 		
 		// Draw the flame
-		if(thrustUp > 1000)
-			
-		g.drawTransformedPicture(
-				box.body.getPosition().x+50,
-				box.body.getPosition().y,
-//				box.body.getPosition().x,
+		// FIXME this is not working
+		//if(thrustUp > 1000)			
+//		g.drawTransformedPicture(
+//				box.body.getPosition().x+50,
 //				box.body.getPosition().y,
-				box.body.getAngle() * RAD2DEG, .2f*thrustUp/100000.0f, flameImage);
+////				box.body.getPosition().x,
+////				box.body.getPosition().y,
+//				box.body.getAngle() * RAD2DEG, .2f*thrustUp/100000.0f, flameImage);
 	}
 
 }

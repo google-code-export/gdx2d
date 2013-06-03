@@ -11,10 +11,10 @@ import com.badlogic.gdx.physics.box2d.Shape.Type;
 public class PhysicsStaticBox extends AbstractPhysicsObject {
 	
 	public PhysicsStaticBox(String name, Vector2 position, int width, int height) {
-		super(Type.Polygon, name, position, width, height, 0, 0, 0, false);
+		super(Type.Polygon, name, position, width, height, 20, 0.1f, 0.3f, false);
 	}
 	
 	public PhysicsStaticBox(String name, Vector2 position, int width, int height, float angle) {
-		super(Type.Polygon, name, position, width, height, angle, 0, 0, angle, false);
+		super(Type.Polygon, name, position, width, height, angle, 0.02f, 0.05f, angle, false);
 	}
 }

@@ -2,7 +2,6 @@ package hevs.gdx2d.demos.physics;
 
 import hevs.gdx2d.components.physics.PhysicsBox;
 import hevs.gdx2d.components.physics.PhysicsStaticBox;
-import hevs.gdx2d.components.physics.utils.PhysicsConstants;
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
 import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
@@ -39,11 +38,11 @@ public class DemoSimplePhysics extends PortableApplication{
 		new PhysicsScreenBoundaries(w, h);
 		
 		// The slope on which the objects roll
-		new PhysicsStaticBox("slope", new Vector2(w/2, h/2), w/3, 2, (float)Math.PI / 40.0f);		
+		new PhysicsStaticBox("slope", new Vector2(w/2, h/2), w/3, 2, (float)Math.PI / 12.0f);		
 		
 		// Build the ball
-		box = new PhysicsBox("ball", new Vector2(w/2, h-0.1f*h), 25, 25, 15, 0.3f, 0.3f);		
-		box.body.setLinearVelocity(20, 2);
+		box = new PhysicsBox("falling_box", new Vector2(w/2, h-0.1f*h), 18, 18, 15, 0.2f, 0.1f);		
+		box.body.setLinearVelocity(-1, 0);
 		
 		// Build the dominoes
 		int nDominoes = 20;

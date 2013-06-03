@@ -141,17 +141,12 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	 * Should be called before destroying the object
 	 */
 	public void destroy(){		
-		synchronized (PhysicsWorld.getInstance()) {
-			PhysicsWorld.getInstance().destroyBody(body);	
-		}				
+		PhysicsWorld.getInstance().destroyBody(body);	
 	}
 
 	/**
-	 * Called periodically
+	 * Makes the object react on collisions
 	 */
-	public void step(){		
-	}
-			
 	public void enableCollisionListener(){
 		World world = PhysicsWorld.getInstance();
 		world.setContactListener(this);
@@ -165,7 +160,10 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	 */
 	public void collision(AbstractPhysicsObject theOtherObject, float energy){				
 	}
-	
+
+	/************************************************************************
+	 * Internal functions for collisions, do not use
+	 ************************************************************************/	
 	@Override
 	final public void beginContact(Contact contact) {		
 	}		

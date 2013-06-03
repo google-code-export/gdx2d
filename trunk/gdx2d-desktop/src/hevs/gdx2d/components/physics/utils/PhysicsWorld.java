@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
  * the singleton design pattern.
  * 
  * @author Pierre-André Mudry (mui)
- * @version 1.01
+ * @version 1.02
  */
 public class PhysicsWorld {
 
@@ -25,13 +25,13 @@ public class PhysicsWorld {
 	}
 	
 	private static float accumulator;
-	private static float step = 1/60f;	
+	private static float step = PhysicsConstants.STEP_SIZE;	
 	
 	static public void updatePhysics(float dt){
 	   accumulator+=dt;
 
 	   while(accumulator>=step){
-		  instance.step(step,6,6);		  
+		  instance.step(step,PhysicsConstants.VELOCITY_IT,PhysicsConstants.POSITION_IT);		  
 	      accumulator -= step / 10f;	      
 	   }
 	}
@@ -45,5 +45,4 @@ public class PhysicsWorld {
 			instance = null;
 		}
 	}
-	
 }

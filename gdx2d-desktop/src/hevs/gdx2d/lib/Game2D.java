@@ -37,15 +37,15 @@ public class Game2D implements ApplicationListener {
 	protected ShapeRenderer shapeRenderer;
 	protected int angle;
 	protected SpriteBatch batch;
-	
+
 	// Use a second thread for game logic updates
 	Timer t;
 	protected static final int LOGIC_UPDATES_PER_SECOND = 1000;
 	protected static int logicRefreshFps = LOGIC_UPDATES_PER_SECOND;
-	
+
 	// For triggered Android actions or intents
 	AndroidResolver resolver;
-	
+
 	/**
 	 * Changes the rate at which the updates are called for the logic part of
 	 * the game. Default is 1000 updates per second.
@@ -69,20 +69,21 @@ public class Game2D implements ApplicationListener {
 	 * @param app
 	 */
 	public Game2D(PortableApplication app) {
-		this.app = app;		
+		this.app = app;
 	}
-	
+
 	// FIXME : this does not work yet
 	/**
-	 * Special contructor for Android, using interface
-	 * for triggering actions from this side
+	 * Special contructor for Android, using interface for triggering actions
+	 * from this side
+	 * 
 	 * @param app
 	 */
 	public Game2D(PortableApplication app, AndroidResolver resolver) {
-		this.app = app;		
+		this.app = app;
 		this.resolver = resolver;
 	}
-	
+
 	@Override
 	public void create() {
 		shapeRenderer = new ShapeRenderer();
@@ -91,66 +92,70 @@ public class Game2D implements ApplicationListener {
 		// Log level for the application
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.app.log("[GDX2Dlib]", "version " + Version.version);
-				
+
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera.setToOrtho(false, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
 		camera.update();
-		
+
 		g = new GdxGraphics(shapeRenderer, batch, camera);
 
-		//batch.setProjectionMatrix(camera.combined);
-		//shapeRenderer.setProjectionMatrix(camera.combined);
-		
+		// batch.setProjectionMatrix(camera.combined);
+		// shapeRenderer.setProjectionMatrix(camera.combined);
+
 		// Let's have multiple input processors
-		InputMultiplexer multiplexer = new InputMultiplexer();					
+		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(new GestureDetector(new GestureListener() {
-			
+
 			@Override
-			public boolean zoom(float initialDistance, float distance) {		
+			public boolean zoom(float initialDistance, float distance) {
 				app.onZoom(initialDistance, distance);
 				return false;
 			}
-			
+
 			@Override
 			public boolean touchDown(float x, float y, int pointer, int button) {
 				return false;
 			}
-			
+
 			@Override
 			public boolean tap(float x, float y, int count, int button) {
 				app.onTap(x, y, count, button);
 				return false;
 			}
-			
+
 			@Override
-			public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-				app.onPinch(initialPointer1, initialPointer2, pointer1, pointer2);
+			public boolean pinch(Vector2 initialPointer1,
+					Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+				app.onPinch(initialPointer1, initialPointer2, pointer1,
+						pointer2);
 				return false;
 			}
-			
+
 			@Override
 			public boolean pan(float x, float y, float deltaX, float deltaY) {
 				app.onPan(x, y, deltaX, deltaY);
 				return false;
 			}
-			
+
 			@Override
 			public boolean longPress(float x, float y) {
-				app.onLongPress(x, y);				
+				app.onLongPress(x, y);
 				return false;
 			}
-			
+
 			@Override
 			public boolean fling(float velocityX, float velocityY, int button) {
 				app.onFling(velocityX, velocityY, button);
 				return false;
 			}
 		}));
-		
+
 		multiplexer.addProcessor(new InputProcessor() {
 
 			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+			public boolean touchUp(int screenX, int screenY, int pointer,
+					int button) {
 				app.onRelease(screenX, screenY, button);
 				return false;
 			}
@@ -162,7 +167,8 @@ public class Game2D implements ApplicationListener {
 			}
 
 			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer,	int button) {
+			public boolean touchDown(int screenX, int screenY, int pointer,
+					int button) {
 				app.onClick(screenX, Gdx.graphics.getHeight() - screenY, button);
 				return false;
 			}
@@ -173,7 +179,7 @@ public class Game2D implements ApplicationListener {
 			}
 
 			@Override
-			public boolean mouseMoved(int screenX, int screenY) {				
+			public boolean mouseMoved(int screenX, int screenY) {
 				return false;
 			}
 
@@ -191,8 +197,8 @@ public class Game2D implements ApplicationListener {
 			@Override
 			public boolean keyDown(int keycode) {
 				// Trigger about box when pressing the menu button on Android
-				if(keycode == Input.Keys.MENU){
-				//	resolver.showAboutBox();
+				if (keycode == Input.Keys.MENU) {
+					// resolver.showAboutBox();
 				}
 				app.onKeyDown(keycode);
 				return false;
@@ -203,7 +209,7 @@ public class Game2D implements ApplicationListener {
 
 		// Initialize app
 		app.onInit();
-		
+
 		// A fixed rate timer that schedules the application game updates
 		t = new Timer();
 		t.scheduleAtFixedRate(new TimerTask() {
@@ -227,7 +233,7 @@ public class Game2D implements ApplicationListener {
 	 * Called when the screen has been resized
 	 */
 	@Override
-	public void resize(int width, int height) {		
+	public void resize(int width, int height) {
 	}
 
 	/**
@@ -258,12 +264,10 @@ public class Game2D implements ApplicationListener {
 	 * Handles application life-cycle on Android and others
 	 */
 	@Override
-	public void dispose() {		
+	public void dispose() {
+		g.dispose();
 		app.onDispose();
-		batch.dispose();		
-		shapeRenderer.dispose();
 		PhysicsWorld.dispose();
 		Gdx.app.debug("[GDX2DLib]", "Game2D disposing");
 	}
-
 }

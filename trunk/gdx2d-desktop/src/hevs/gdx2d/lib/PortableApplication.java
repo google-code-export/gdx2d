@@ -1,6 +1,5 @@
 package hevs.gdx2d.lib;
 
-import hevs.gdx2d.demos.DemoSelector;
 import hevs.gdx2d.lib.interfaces.GameInterface;
 import hevs.gdx2d.lib.interfaces.KeyboardInterface;
 import hevs.gdx2d.lib.interfaces.TouchInterface;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
@@ -210,7 +208,7 @@ public abstract class PortableApplication implements TouchInterface,
 			config.samples = 2; // Multi-sampling enables anti-alias for lines
 			config.addIcon("data/icon16.png", FileType.Internal);
 			config.addIcon("data/icon32.png", FileType.Internal);
-			config.addIcon("data/icon64.png", FileType.Internal); // FIXME: icon not showing properly on Ubuntu 10.04
+			config.addIcon("data/icon64.png", FileType.Internal); // FIXME: icon not showing properly on Ubuntu 10.04			
 			theGame = new Game2D(this);			
 			LwjglApplication app = new LwjglApplication(theGame, config);
 		}			

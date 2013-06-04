@@ -55,7 +55,6 @@ public class DemoLight extends PortableApplication {
 		world.setGravity(new Vector2(0, 0));
 		
 		// The light manager
-		RayHandler.setColorPrecisionMediump();
 		rayHandler = new RayHandler(world);
 
 		// This is the light controlled by the mouse click and drag
@@ -66,7 +65,7 @@ public class DemoLight extends PortableApplication {
 		p.setDistance(700f);
 		p.setColor(new Color(0.9f, 0f, 0.9f, 0.9f));
 		p.setActive(false);
- 
+
 		// The two light cones that are always present 
 		c1 = new ConeLight(rayHandler, 200, new Color(1, 1, 1, 0.92f), 800, 0.2f * width, 0.9f * height, 270, 40);		
 		c2 = new ConeLight(rayHandler, 200, new Color(0.1f, 0.1f, 1, 0.92f), 800, 0.8f * width, 0.9f * height, 270, 40);
@@ -117,7 +116,7 @@ public class DemoLight extends PortableApplication {
 		for (Body b : list) {																		
 			g.drawFilledCircle((int)b.getPosition().x, (int)b.getPosition().y, 12, Color.BLUE);
 		}
-			
+		
 		// Render the lights
 		rayHandler.updateAndRender();
 		
@@ -135,7 +134,8 @@ public class DemoLight extends PortableApplication {
 			c1.setActive(!c1.isActive());
 			c2.setActive(!c2.isActive());
 		}
-		
+
+		// Turn on the light when pushing button		
 		if(button == Input.Buttons.LEFT)
 		{
 			p.setActive(true);
@@ -149,16 +149,12 @@ public class DemoLight extends PortableApplication {
 	}
 	
 	@Override
-	public void onRelease(int x, int y, int button) {	
+	public void onRelease(int x, int y, int button) {
+		// Turn off the light when releasing button
 		p.setActive(false);
 	}
 
-
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		new DemoLight(false);
 	}
-
 }

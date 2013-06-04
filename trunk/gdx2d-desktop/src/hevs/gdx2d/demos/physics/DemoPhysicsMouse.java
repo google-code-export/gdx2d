@@ -3,7 +3,6 @@ package hevs.gdx2d.demos.physics;
 import hevs.gdx2d.components.physics.PhysicsBox;
 import hevs.gdx2d.components.physics.PhysicsCircle;
 import hevs.gdx2d.components.physics.PhysicsStaticBox;
-import hevs.gdx2d.components.physics.utils.PhysicsConstants;
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
 import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
@@ -156,7 +155,7 @@ public class DemoPhysicsMouse extends PortableApplication {
 			def.collideConnected = true;
 			def.dampingRatio = 0.8f;
 			def.target.set(testPoint.x, testPoint.y);
-			def.maxForce = 1000.0f * hitBody.getMass();
+			def.maxForce = 100.0f * hitBody.getMass();
 
 			mouseJoint = (MouseJoint) world.createJoint(def);
 			hitBody.setAwake(true);

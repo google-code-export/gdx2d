@@ -3,8 +3,6 @@ package hevs.gdx2d.demos.gestures;
 import hevs.gdx2d.components.bitmaps.BitmapImage;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
-import hevs.gdx2d.lib.utils.Logger;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 

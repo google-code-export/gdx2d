@@ -10,6 +10,10 @@ import com.badlogic.gdx.Gdx;
  */
 public class Logger {
 	
+	static{
+		Gdx.app.setLogLevel(Application.LOG_INFO);
+	}
+	
 	public static final int NONE = Application.LOG_NONE;
 	public static final int ERROR = Application.LOG_ERROR;
 	public static final int INFO = Application.LOG_INFO;

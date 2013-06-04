@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 
 /**
  * Demonstrates how to render particles
- * @author Pierre-Andre Mudry (mui)
+ * @author Pierre-André Mudry (mui)
  * @version 1.0 
  */
 public class Particle extends PhysicsBox {
@@ -30,10 +30,7 @@ public class Particle extends PhysicsBox {
 	}
 
 	public boolean shouldbeDestroyed(){
-		if(age > maxAge)
-			return true;
-		else
-			return false;
+		return age > maxAge ? true : false;		
 	}
 	
 	public void step() {
@@ -41,10 +38,13 @@ public class Particle extends PhysicsBox {
 	}
 
 	public void render(GdxGraphics g) {
-		// TODO Make a nice blending rendering
-		Color col = g.spriteBatch.getColor();
+		final Color col = g.spriteBatch.getColor();
 		g.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-		g.spriteBatch.setColor(1.0f, 1.0f, 1.0f, 1.0f- age / (float) (maxAge+10));		
+		
+		// Make the particle disappear with time
+		g.spriteBatch.setColor(.5f, 0.7f, 0.9f, 1.0f - age / (float) (maxAge+10));
+		
+		// Draw the particle
 		g.spriteBatch.begin();
 			g.spriteBatch.draw(img.getRegion(),(int) body.getPosition().x - img.getImage().getWidth()/2,(int) body.getPosition().y-img.getImage().getHeight()/2);
 			g.spriteBatch.setColor(col);

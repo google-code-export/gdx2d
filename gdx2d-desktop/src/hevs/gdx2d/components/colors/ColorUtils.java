@@ -1,7 +1,5 @@
 package hevs.gdx2d.components.colors;
 
-import javax.swing.text.rtf.RTFEditorKit;
-
 import com.badlogic.gdx.graphics.Color;
 
 /**

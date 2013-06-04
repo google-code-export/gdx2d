@@ -5,7 +5,6 @@ import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
 
-import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.badlogic.gdx.Gdx;

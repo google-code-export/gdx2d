@@ -4,20 +4,21 @@ import hevs.gdx2d.lib.utils.Utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * A class to stream music without loading it within LibGDX.
  * 
  * @author Pierre-Andre Mudry / mui
- * @version 1.0
+ * @version 1.1
  */
-public class MusicPlayer {
+public class MusicPlayer implements Disposable{
 	protected Music s;
 	protected float volume = 1.0f;
 		
 	public MusicPlayer(String file){
 		s = Gdx.audio.newMusic(Gdx.files.internal(file));		
-		Utils.callCheck("hevs.gdx2d.lib.Game2D", "create");
+		Utils.callCheck("hevs.gdx2d.lib.Game2D", "create");		
 	}
 	
 	public boolean isPlaying(){
@@ -48,7 +49,16 @@ public class MusicPlayer {
 	 * Stops playing the song
 	 */
 	public void stop(){
-		s.stop();		
+		s.stop();
+	}
+		
+
+	/**
+	 * Release resources when done working with them
+	 */
+	@Override
+	public void dispose() {
+		s.dispose();		
 	}
 	
 	/**
@@ -57,5 +67,11 @@ public class MusicPlayer {
 	public void loop(){		
 		s.play();
 		s.setLooping(true);
+	}
+	
+	@Override
+	protected void finalize() throws Throwable { 
+		super.finalize();
+		dispose();
 	}
 }

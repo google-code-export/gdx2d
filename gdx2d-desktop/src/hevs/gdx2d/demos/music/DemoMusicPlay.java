@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Color;
  * Shows how to play music in the framework
  * 
  * @author Pierre-André Mudry (mui)
- * @version 1.0
+ * @version 1.01
  */
 public class DemoMusicPlay extends PortableApplication {
 
@@ -33,7 +33,18 @@ public class DemoMusicPlay extends PortableApplication {
 		// Draws the school logo
 		g.drawSchoolLogo();
 	}
-
+	
+	/**
+	 * Called when the class is terminated
+	 */
+	@Override
+	public void onDispose() {	
+		super.onDispose();
+		
+		// We must release all the resources we got
+		f.dispose();
+	}
+	
 	@Override
 	public void onInit() {
 		// The song we want to play

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * A game graphics implementation for LibGDX based on the
@@ -23,9 +24,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
  * @author Nils Chatton (chn)
  * @version 1.12
  */
-public class GdxGraphics 
+public class GdxGraphics implements Disposable
 {
-
 	/**
 	 * For camera operations
 	 */
@@ -42,15 +42,15 @@ public class GdxGraphics
 	Sprite sprite;					
 	
 	// For sprite-based logo
-	static final protected Texture logoTex = new Texture(Gdx.files.internal("data/logo_hes.png"));;	
-	static final protected Texture circleTex = new Texture(Gdx.files.internal("data/circle.png"));;
+	final protected Texture logoTex = new Texture(Gdx.files.internal("data/logo_hes.png"));;	
+	final protected Texture circleTex = new Texture(Gdx.files.internal("data/circle.png"));;
 	
 	public GdxGraphics(ShapeRenderer shapeRenderer2, SpriteBatch spriteBatch, OrthographicCamera camera) {
 		this.shapeRenderer = shapeRenderer2;
 		this.spriteBatch = spriteBatch;
 		this.font = new BitmapFont();
 		this.camera = camera;
-		
+			
 		// A camera that never moves
 		this.fixedcamera = new OrthographicCamera();
 		fixedcamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -63,7 +63,14 @@ public class GdxGraphics
 		// Create a default sprite for filled circles
 		sprite = new Sprite(circleTex, 0, 0, 128, 128);
 	}
-
+		
+	@Override
+	public void dispose() {
+		logoTex.dispose();
+		circleTex.dispose();		
+		font.dispose();		
+	}
+	
 	/**
 	 * Draws frame per second (FPS) information
 	 */

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * An image encapsulation class for GDX2DLib.
@@ -15,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * 
  * @version 1.1
  */
-public class BitmapImage {
+public class BitmapImage implements Disposable{
 	
 	private Texture image;
 	private TextureRegion tRegion;
@@ -23,7 +24,7 @@ public class BitmapImage {
 	public BitmapImage(String file) {
 		image = new Texture(Gdx.files.internal(file));
 		tRegion = new TextureRegion(image);
-		image.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);		
+		//image.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);		
 		//Utils.callCheck("hevs.gdx2d.lib.Game2D", "create");		
 	}
 
@@ -50,8 +51,13 @@ public class BitmapImage {
 	}
 	
 	@Override
+	public void dispose() {
+		image.dispose();
+	}
+	
+	@Override
 	protected void finalize() throws Throwable {	
 		super.finalize();
-		image.dispose();
+		dispose();
 	}
 }

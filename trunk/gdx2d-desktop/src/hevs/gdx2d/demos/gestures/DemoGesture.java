@@ -3,6 +3,7 @@ package hevs.gdx2d.demos.gestures;
 import hevs.gdx2d.components.bitmaps.BitmapImage;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
+import hevs.gdx2d.lib.utils.Logger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,7 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
  * Simple demo for gestures on Android. 
  * 
  * @author Pierre-André Mudry (mui)
- * @version 1.0
+ * @version 1.01
  */
 public class DemoGesture extends PortableApplication{
 
@@ -42,8 +43,9 @@ public class DemoGesture extends PortableApplication{
 	}
 		
 	@Override
-	public void onPan(float x, float y, float deltaX, float deltaY) {
-		cam.position.add(-deltaX * cam.zoom, deltaY * cam.zoom, 0);		
+	public void onPan(float x, float y, float deltaX, float deltaY) {		
+		cam.position.add(-deltaX * cam.zoom, deltaY * cam.zoom, 0);	
+		cam.update();
 	}
 	
 	@Override
@@ -59,6 +61,8 @@ public class DemoGesture extends PortableApplication{
 			cam = g.getCamera();
 		
 		g.drawPicture(getWindowWidth()/2, getWindowHeight()/2, image);	
+		g.drawSchoolLogoUpperRight();
+		g.drawFPS();
 	}
 	
 	public static void main(String args[])

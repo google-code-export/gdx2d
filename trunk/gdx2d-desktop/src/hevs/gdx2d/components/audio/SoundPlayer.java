@@ -4,15 +4,17 @@ import hevs.gdx2d.lib.utils.Utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * A class to play *short* samples within LibGDX. The music sample
  * must be short because it is completely loaded into memory.
  * 
  * @author Nils Chatton (chn)
- * @version 1.0
+ * @author Pierre-André Mudry (mui)
+ * @version 1.1
  */
-public class SoundPlayer {
+public class SoundPlayer implements Disposable{
 	protected Sound s;
 	protected float volume = 1.0f;
 		
@@ -53,5 +55,13 @@ public class SoundPlayer {
 	 */
 	public void loop(){
 		s.loop();
+	}
+	
+	/**
+	 * Release resources when done working with them
+	 */
+	@Override
+	public void dispose() {
+		s.dispose();		
 	}
 }

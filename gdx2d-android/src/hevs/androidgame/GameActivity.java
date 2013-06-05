@@ -1,6 +1,5 @@
 package hevs.androidgame;
 
-import hevs.gdx2d.demos.image_drawing.DemoSimpleImage;
 import hevs.gdx2d.demos.physics.DemoPhysicsBalls;
 import hevs.gdx2d.lib.Game2D;
 import android.content.pm.ActivityInfo;

@@ -9,19 +9,23 @@ import hevs.gdx2d.lib.interfaces.DrawableObject;
  * 
  * @author Pierre-André Mudry (mui)
  * @author Christopher Metrailler (mei)
- * @version 1.1
+ * @version 1.2
  */
 public class Ball implements DrawableObject {
 	public float posx, posy;
-	final static BitmapImage img = new BitmapImage("data/soccer.png");;
+	final BitmapImage img = new BitmapImage("data/soccer.png");;
 
-	public Ball(int x, int y) {
+	public Ball(float x, float y) {
 		posx = x;
 		posy = y;
 	}
 
 	@Override
 	public void draw(GdxGraphics g) {
-		g.drawPicture(posx, posy, img);
+		draw(g, 1.0f);
+	}
+		
+	public void draw(GdxGraphics g, float scale){
+		g.drawTransformedPicture(posx, posy, 0, scale, img);
 	}
 }

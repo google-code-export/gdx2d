@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.Disposable;
  * 
  * @author Pierre-André Mudry (mui)
  * @author Nils Chatton (chn)
- * @version 1.12
+ * @version 1.13
  */
 public class GdxGraphics implements Disposable
 {
@@ -32,7 +32,7 @@ public class GdxGraphics implements Disposable
 	
 	protected ShapeRenderer shapeRenderer;
 	protected Color currentColor = Color.WHITE;
-	protected Color backGroundColor = Color.BLACK;
+	protected Color backgroundColor = Color.BLACK;
 	public SpriteBatch spriteBatch;
 
 	protected BitmapFont font;
@@ -67,7 +67,9 @@ public class GdxGraphics implements Disposable
 	public void dispose() {
 		logoTex.dispose();
 		circleTex.dispose();		
-		font.dispose();		
+		font.dispose();
+		spriteBatch.dispose();
+		
 	}
 	
 	/**
@@ -75,8 +77,10 @@ public class GdxGraphics implements Disposable
 	 */
 	public void drawFPS(){
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
-		setColor(Color.WHITE);
+		Color oldColor = font.getColor();
+		font.setColor(Color.WHITE);		
 		drawString(5, 15, "FPS: " + Gdx.graphics.getFramesPerSecond());
+		font.setColor(oldColor);
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
 	
@@ -206,7 +210,7 @@ public class GdxGraphics implements Disposable
 	public void clearPixel(float x, float y) {
 		shapeRenderer.begin(ShapeType.Point);
 			shapeRenderer.identity();
-			shapeRenderer.setColor(backGroundColor);
+			shapeRenderer.setColor(backgroundColor);
 			shapeRenderer.point(x, y, 0);
 		shapeRenderer.end();
 	}

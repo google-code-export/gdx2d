@@ -1,10 +1,11 @@
-package hevs.gdx2d.demos.tween;
+package hevs.gdx2d.demos.tween.tweenengine;
 
+import hevs.gdx2d.demos.tween.Ball;
 import aurelienribon.tweenengine.TweenAccessor;
 
 /**
- * An accessor class for the modifying the parameters
- * of the ball.
+ * An accessor class for the modifying the parameters of the ball.
+ * 
  * @author Pierre-André Mudry (mui)
  * @version 1.0
  */

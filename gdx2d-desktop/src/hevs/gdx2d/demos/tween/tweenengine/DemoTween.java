@@ -1,5 +1,6 @@
-package hevs.gdx2d.demos.tween;
+package hevs.gdx2d.demos.tween.tweenengine;
 
+import hevs.gdx2d.demos.tween.Ball;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
 import aurelienribon.tweenengine.Tween;

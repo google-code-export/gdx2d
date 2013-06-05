@@ -128,7 +128,8 @@ public class DemoSelector extends JFrame {
 		tests.put("Rotating image", "image_drawing.DemoRotatingImage");
 		tests.put("Music player", "music.DemoMusicPlay");
 		tests.put("Scrolling", "scrolling.DemoScrolling");
-		tests.put("Animation tweening", "tween.DemoTween");
+		tests.put("Animation tweening", "tween.tweenengine.DemoTween");
+		tests.put("Simple interpolation", "tween.interpolatorengine.DemoSimpleInterpolation");
 		tests.put("Complex shapes", "complex_shapes.DemoComplexShapes");
 		tests.put("Simple physics (dominoes)", "physics.DemoSimplePhysics");
 		tests.put("Physics soccer ball", "physics.DemoPhysicsBalls");

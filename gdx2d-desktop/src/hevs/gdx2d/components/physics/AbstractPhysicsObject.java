@@ -1,5 +1,6 @@
 package hevs.gdx2d.components.physics;
 
+import hevs.gdx2d.components.physics.utils.PhysicsConstants;
 import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 
 import com.badlogic.gdx.math.Vector2;
@@ -34,7 +35,7 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	public Body body;
 	
 	// The physical characteristics of the the object, such as friction etc...
-	protected Fixture f;
+	public Fixture f;
 	
 	// Reusable object for creating other objects
 	static final private BodyDef bodyDef = new BodyDef();
@@ -53,7 +54,7 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	 * @param friction
 	 * @param isDynamic
 	 */
-	public AbstractPhysicsObject(Type t, String name, Vector2 position, int width, int height, float density, float restitution, float friction, boolean isDynamic){
+	public AbstractPhysicsObject(Type t, String name, Vector2 position, float width, float height, float density, float restitution, float friction, boolean isDynamic){
 		this.name = name;
 		createObject(t, name, position, width, height, density, restitution, friction, 0, isDynamic);
 	}
@@ -71,7 +72,7 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	 * @param angle
 	 * @param isDynamic
 	 */
-	public AbstractPhysicsObject(Type t, String name, Vector2 position, int width, int height, float density, float restitution, float friction, float angle, boolean isDynamic){
+	public AbstractPhysicsObject(Type t, String name, Vector2 position, float width, float height, float density, float restitution, float friction, float angle, boolean isDynamic){
 		this.name = name;
 		createObject(t, name, position, width, height, density, restitution, friction, angle, isDynamic);
 	}
@@ -85,8 +86,13 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	 * @param height
 	 * @param isDynamic
 	 */
-	private void createObject(Type t, String name, Vector2 position, int width, int height, float density, float restitution, float friction, float angle, boolean isDynamic){				
-        bodyDef.position.set(position);
+	private void createObject(Type t, String name, Vector2 position, float width, float height, float density, float restitution, float friction, float angle, boolean isDynamic){				
+        // Conversions from pixel world to meters
+		Vector2 pos = position.cpy().scl(PhysicsConstants.PIXEL_TO_METERS);
+        width *= PhysicsConstants.PIXEL_TO_METERS;
+        height *= PhysicsConstants.PIXEL_TO_METERS;
+        
+		bodyDef.position.set(pos);
         
 		if(isDynamic)
 			bodyDef.type = BodyType.DynamicBody;
@@ -169,18 +175,22 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	}		
 	
 	@Override
-	final public void endContact(Contact contact) {		
-	}
-	
-	@Override
-	final public void postSolve(Contact contact, ContactImpulse impulse) {
+	final public void endContact(Contact contact) {
 		AbstractPhysicsObject ob1 = null, ob2 = null; 		
 		ob1 = (AbstractPhysicsObject) contact.getFixtureA().getBody().getUserData();
 		ob2 = (AbstractPhysicsObject) contact.getFixtureB().getBody().getUserData();
 		
-		float energy = impulse.getNormalImpulses()[0];
-		ob1.collision(ob2, energy);
-		ob2.collision(ob1, energy);
+		ob1.collision(ob2, lastCollideEnergy);
+		ob2.collision(ob1, lastCollideEnergy);
+		
+		lastCollideEnergy = -1;
+	}
+	
+	float lastCollideEnergy = -1;
+	
+	@Override
+	final public void postSolve(Contact contact, ContactImpulse impulse) {
+		lastCollideEnergy = impulse.getNormalImpulses()[0];
 	}
 	
 	@Override

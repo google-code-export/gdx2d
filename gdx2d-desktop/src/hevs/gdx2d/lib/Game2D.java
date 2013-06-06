@@ -43,9 +43,6 @@ public class Game2D implements ApplicationListener {
 	protected static final int LOGIC_UPDATES_PER_SECOND = 1000;
 	protected static int logicRefreshFps = LOGIC_UPDATES_PER_SECOND;
 
-	// For triggered Android actions or intents
-	// public AndroidResolver resolver = null;	// TODO: check this
-
 	/**
 	 * Changes the rate at which the updates are called for the logic part of
 	 * the game. Default is 1000 updates per second.
@@ -71,18 +68,6 @@ public class Game2D implements ApplicationListener {
 	public Game2D(PortableApplication app) {
 		this.app = app;
 	}
-
-	// FIXME : this does not work yet
-	/**
-	 * Special contructor for Android, using interface for triggering actions
-	 * from this side
-	 * 
-	 * @param app
-	 */
-	/*public Game2D(PortableApplication app, AndroidResolver resolver) {
-		this.app = app;
-		this.resolver = resolver;
-	}*/
 
 	@Override
 	public void create() {

@@ -1,5 +1,6 @@
 package hevs.gdx2d.lib;
 
+import hevs.gdx2d.lib.interfaces.AndroidResolver;
 import hevs.gdx2d.lib.interfaces.GameInterface;
 import hevs.gdx2d.lib.interfaces.KeyboardInterface;
 import hevs.gdx2d.lib.interfaces.TouchInterface;
@@ -19,14 +20,14 @@ import com.badlogic.gdx.math.Vector2;
  * to overload the methods you need.
  * 
  * @author Pierre-André Mudry (mui)
- * @version 1.01
+ * @author Christopher Metrailler (mei)
+ * @version 1.1
  */
 public abstract class PortableApplication implements TouchInterface,
 		KeyboardInterface, GameInterface {
 
 	protected boolean onAndroid;
-	private Game2D theGame;
-	
+	private AndroidResolver resolver = null;
 	
 	/**
 	 * Changes the title of the window (Desktop only)
@@ -184,6 +185,26 @@ public abstract class PortableApplication implements TouchInterface,
 	}
 
 	/**
+	 * Set the {@link AndroidResolver} when the application
+	 * is created on Android.
+	 * The resolver must be create in an Android Activity with its Context
+	 * @since 1.1
+	 * @param resolver the Android resolver
+	 */
+	public void setAndroidResolver(AndroidResolver resolver) {
+		this.resolver = resolver;
+	}
+	
+	/**
+	 * Return the {@link AndroidResolver} to use Android actions.
+	 * @since 1.1
+	 * @return The resolver, or null if no running on Android
+	 */
+	public AndroidResolver getAndroidResolver() {
+		return resolver;
+	}
+	
+	/**
 	 * Creates an application using GDX2D
 	 * @param onAndroid true if running on Android
 	 * @param width The width of the screen (if running desktop)
@@ -191,7 +212,7 @@ public abstract class PortableApplication implements TouchInterface,
 	 */
 	public PortableApplication(boolean onAndroid, int width, int height) {
 		this.onAndroid = onAndroid;
-				
+		
 		if (!onAndroid)			
 		{
 			// TODO refactor this more nicely
@@ -206,14 +227,19 @@ public abstract class PortableApplication implements TouchInterface,
 			config.foregroundFPS = 60;
 			config.backgroundFPS = 60;
 			config.samples = 2; // Multi-sampling enables anti-alias for lines
-			config.addIcon("data/icon16.png", FileType.Internal);
+			
+			String os = System.getProperty("os.name").toLowerCase();
+			
+			if(os.contains("win")){						
+				config.addIcon("data/icon16.png", FileType.Internal);
+			}
+			
 			config.addIcon("data/icon32.png", FileType.Internal);
 			config.addIcon("data/icon64.png", FileType.Internal); // FIXME: icon not showing properly on Ubuntu 10.04			
-			theGame = new Game2D(this);			
-			LwjglApplication app = new LwjglApplication(theGame, config);
-		}			
+			new LwjglApplication(new Game2D(this), config);
+		}
 	}
-
+	
 	/**
 	 * Creates an application using gdx2d
 	 * @param onAndroid True if running on Android

@@ -44,7 +44,7 @@ public class Game2D implements ApplicationListener {
 	protected static int logicRefreshFps = LOGIC_UPDATES_PER_SECOND;
 
 	// For triggered Android actions or intents
-	AndroidResolver resolver;
+	// public AndroidResolver resolver = null;	// TODO: check this
 
 	/**
 	 * Changes the rate at which the updates are called for the logic part of
@@ -79,10 +79,10 @@ public class Game2D implements ApplicationListener {
 	 * 
 	 * @param app
 	 */
-	public Game2D(PortableApplication app, AndroidResolver resolver) {
+	/*public Game2D(PortableApplication app, AndroidResolver resolver) {
 		this.app = app;
 		this.resolver = resolver;
-	}
+	}*/
 
 	@Override
 	public void create() {

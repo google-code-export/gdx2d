@@ -3,6 +3,7 @@ package hevs.gdx2d.demos.music;
 import hevs.gdx2d.components.audio.MusicPlayer;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
+import hevs.gdx2d.lib.interfaces.AndroidResolver;
 
 import com.badlogic.gdx.graphics.Color;
 
@@ -33,20 +34,21 @@ public class DemoMusicPlay extends PortableApplication {
 		// Draws the school logo
 		g.drawSchoolLogo();
 	}
-	
+
 	/**
 	 * Called when the class is terminated
 	 */
 	@Override
-	public void onDispose() {	
+	public void onDispose() {
 		super.onDispose();
-		
+
 		// We must release all the resources we got
 		f.dispose();
 	}
-	
+
 	@Override
 	public void onInit() {
+		setTitle("Music player, mui 2013");
 		// The song we want to play
 		f = new MusicPlayer("data/Blues-Loop.mp3");
 	}
@@ -57,6 +59,12 @@ public class DemoMusicPlay extends PortableApplication {
 			f.stop();
 		else
 			f.loop();
+
+		if (onAndroid) {
+			// Display Toast on Android
+			final String sToast = (f.isPlaying()) ? "Playing started." : "Playing stopped.";
+			getAndroidResolver().showToast(sToast, AndroidResolver.LENGTH_SHORT);
+		}
 	}
 
 	public DemoMusicPlay(boolean onAndroid) {

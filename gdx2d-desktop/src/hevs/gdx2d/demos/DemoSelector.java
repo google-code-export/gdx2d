@@ -57,7 +57,7 @@ public class DemoSelector extends JFrame {
 
 	/**
 	 * Scans all classes accessible from the context class loader which belong
-	 * to the given package and subpackages.
+	 * to the given package and subpackage.
 	 * 
 	 * @param packageName The base package
 	 * @return The classes
@@ -125,11 +125,12 @@ public class DemoSelector extends JFrame {
 		tests.put("Basic animation", "simple.DemoSimpleAnimation");
 		tests.put("Image drawing", "image_drawing.DemoSimpleImage");
 		tests.put("Mirroring image", "image_drawing.DemoMirrorImage");
+		tests.put("Alpha transparency", "image_drawing.DemoAlphaImage");
 		tests.put("Rotating image", "image_drawing.DemoRotatingImage");
 		tests.put("Music player", "music.DemoMusicPlay");
+		tests.put("Font generation", "fonts.DemoFontGeneration");
 		tests.put("Scrolling", "scrolling.DemoScrolling");
-		tests.put("Animation tweening", "tween.tweenengine.DemoTween");
-		tests.put("Position interpolation", "tween.interpolatorengine.DemoPositionInterpolator");
+		tests.put("Position interpolator", "tween.interpolatorengine.DemoPositionInterpolator");
 		tests.put("Complex shapes", "complex_shapes.DemoComplexShapes");
 		tests.put("Simple physics (dominoes)", "physics.DemoSimplePhysics");
 		tests.put("Physics soccer ball", "physics.DemoPhysicsBalls");
@@ -137,6 +138,7 @@ public class DemoSelector extends JFrame {
 		tests.put("Physics collision detection", "physics.collisions.DemoCollisionListener");
 		tests.put("Particles", "physics.particle.DemoParticlePhysics");
 		tests.put("Lights", "lights.DemoLight");
+		tests.put("Rotating lights", "lights.DemoRotateLight");
 		
 		// Populate the window
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -48,7 +48,7 @@ public class DemoGesture extends PortableApplication{
 	
 	@Override
 	public void onInit() {	
-		image = new BitmapImage("data/Android_PI_48x48.png");
+		image = new BitmapImage("data/images/Android_PI_48x48.png");
 	}
 	
 	@Override

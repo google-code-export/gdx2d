@@ -5,9 +5,7 @@ import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.interfaces.DrawableObject;
 
 public class Sky implements DrawableObject{
-	static BitmapImage image = new BitmapImage("data/rocket_128.png");
-	
-
+	static BitmapImage image = new BitmapImage("data/images/rocket_128.png");
 	
 	Sky()
 	{

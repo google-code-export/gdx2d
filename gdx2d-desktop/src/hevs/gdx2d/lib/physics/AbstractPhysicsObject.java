@@ -1,7 +1,9 @@
-package hevs.gdx2d.components.physics;
+package hevs.gdx2d.lib.physics;
 
+import hevs.gdx2d.components.physics.PhysicsBox;
+import hevs.gdx2d.components.physics.PhysicsCircle;
+import hevs.gdx2d.components.physics.PhysicsStaticBox;
 import hevs.gdx2d.components.physics.utils.PhysicsConstants;
-import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -27,15 +29,15 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author Pierre-André Mudry (mui)
  * @version 1.0
  */
-public abstract class AbstractPhysicsObject implements ContactListener{
+public abstract class AbstractPhysicsObject implements ContactListener, BodyInterface{
 	// A name for the object
 	public String name;
 	
 	// Contains the body for physics simulation
-	public Body body;
+	private Body body;
 	
 	// The physical characteristics of the the object, such as friction etc...
-	public Fixture f;
+	protected Fixture f;
 	
 	// Reusable object for creating other objects
 	static final private BodyDef bodyDef = new BodyDef();
@@ -114,8 +116,8 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 		}
 					
         World world = PhysicsWorld.getInstance();
-		body = world.createBody(bodyDef);		
-						
+		body = world.createBody(bodyDef);
+				
 		createFixture(s, density, restitution, friction);
 		
 		// Destroy the shape because we don't need it anymore (JNI side)
@@ -159,6 +161,7 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	}
 	
 	/**
+	 * TODO: should this method be abstract ? Breaks the API but better for next year
 	 * Function which is called when collision with this object occurs
 	 * @param a
 	 * @param body
@@ -196,5 +199,111 @@ public abstract class AbstractPhysicsObject implements ContactListener{
 	@Override
 	final public void preSolve(Contact contact, Manifold oldManifold) {			
 	}	
+
+	/****
+	 * Body method redefinition for meters / pixels
+	 * Implementation of the {@link BodyInterface} interface
+	 */
+	@Override
+	public Vector2 getBodyPosition(){
+		return body.getPosition().scl(PhysicsConstants.METERS_TO_PIXELS);
+	}
 	
+	@Override
+	public float getBodyAngle(){
+		return body.getAngle();
+	}
+	
+	@Override
+	public float getBodyAngleDeg(){
+		return body.getAngle() * PhysicsConstants.RAD_TO_DEG;
+	}
+	
+	@Override
+	public float getBodyRadius(){
+		if(f.getShape().getType() == Type.Circle){			
+			return f.getShape().getRadius()*PhysicsConstants.METERS_TO_PIXELS;
+		}
+		else
+		{			
+			throw new UnsupportedOperationException("Only circle shapes have radius");
+		}
+	}
+
+	@Override
+	public void setBodyLinearDamping(float damping){
+		body.setLinearDamping(damping);
+	}
+	
+	@Override
+	public void setBodyAngularDamping(float damping){
+		body.setAngularDamping(damping);
+	}
+
+	@Override
+	public void applyBodyTorque(float torque, boolean wake){
+		body.applyTorque(torque, wake);
+	}
+	
+	@Override
+	public void setBodyAwake(boolean awake){
+		body.setAwake(awake);
+	}
+	
+	@Override
+	public void setBodyLinearVelocity(Vector2 v){
+		body.setLinearVelocity(v);
+	}
+	
+	@Override
+	public void setBodyLinearVelocity(float vx, float vy){
+		body.setLinearVelocity(vx, vy);
+	}
+	
+	@Override
+	public void applyBodyAngularImpulse(float impulse, boolean wake){
+		body.applyAngularImpulse(impulse, wake);
+	}
+	
+	@Override
+	public void applyBodyForce(float forceX, float forceY, float pointX,
+			float pointY, boolean wake) {
+		body.applyForce(forceX, forceY, pointX, pointY, wake);
+	}
+	
+	@Override
+	public void applyBodyForce(Vector2 force, Vector2 point, boolean wake) {
+		body.applyForce(force, point, wake);
+	}
+	
+	@Override
+	public void applyBodyForceToCenter(float forceX, float forceY, boolean wake) {
+		body.applyForceToCenter(forceX, forceY, wake);
+	}
+
+	@Override
+	public void applyBodyForceToCenter(Vector2 force, boolean wake) {
+		body.applyForceToCenter(force, wake);
+	}
+	
+	@Override
+	public void applyBodyLinearImpulse(float impulseX, float impulseY,
+			float pointX, float pointY, boolean wake) {
+		body.applyLinearImpulse(impulseX, impulseY, pointX, pointY, wake);
+	}
+	
+	@Override
+	public void applyBodyLinearImpulse(Vector2 impulse, Vector2 point,
+			boolean wake) {
+		body.applyLinearImpulse(impulse, point, wake);
+	}
+
+	/**
+	 * Convenience method for some special operations. You should not use that normally because
+	 * the dimensions are not scaled appropriately in the object itself.
+	 * @return The body for the simulation
+	 */	
+	public Body getBody(){
+		return this.body;
+	}	
 }

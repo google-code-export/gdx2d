@@ -6,5 +6,5 @@ package hevs.gdx2d.lib;
  * @version 1.0
  */
 public class Version {
-	public static final String version = "0.93";
+	public static final String version = "0.99a";
 }

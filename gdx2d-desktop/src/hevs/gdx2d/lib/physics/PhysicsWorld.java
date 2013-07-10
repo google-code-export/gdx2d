@@ -1,5 +1,8 @@
-package hevs.gdx2d.components.physics.utils;
+package hevs.gdx2d.lib.physics;
 
+import hevs.gdx2d.components.physics.utils.PhysicsConstants;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -19,7 +22,7 @@ public class PhysicsWorld {
 
 	public static World getInstance() {
 		if (instance == null) {
-			instance = new World(new Vector2(0, -10), true);
+			instance = new World(new Vector2(0, PhysicsConstants.GRAVITY_VALUE), true);
 		}		
 		return instance;		
 	}
@@ -27,12 +30,23 @@ public class PhysicsWorld {
 	private static float accumulator;
 	private static float step = PhysicsConstants.STEP_SIZE;	
 	
+	/**
+	 * Call this to update the physics simulation
+	 */
+	static public void updatePhysics(){
+		updatePhysics(Gdx.graphics.getDeltaTime());
+	}
+	
+	/**
+	 * Call this to update the physics simulation
+	 * @param dt The amount of time that should be simulated	 
+	 **/
 	static public void updatePhysics(float dt){
 	   accumulator+=dt;
 
 	   while(accumulator>=step){
 		  instance.step(step,PhysicsConstants.VELOCITY_IT,PhysicsConstants.POSITION_IT);		  
-	      accumulator -= step / 10f;	      
+	      accumulator -= step / PhysicsConstants.SPEEDUP;  
 	   }
 	}
 	

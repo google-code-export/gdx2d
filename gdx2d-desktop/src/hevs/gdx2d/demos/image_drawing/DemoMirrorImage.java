@@ -26,10 +26,10 @@ public class DemoMirrorImage extends PortableApplication{
 	@Override
 	public void onInit() {
 		// Sets the window title
-		setTitle("Simple image drawing, mui 2013");
+		setTitle("Mirror image drawing, mui 2013");
 		
 		// Loads the image that will be displayed in the middle of the screen
-		imgBitmap = new BitmapImage("data/Android_PI_48x48.png");		
+		imgBitmap = new BitmapImage("data/images/Android_PI_48x48.png");		
 	}
 
 	@Override

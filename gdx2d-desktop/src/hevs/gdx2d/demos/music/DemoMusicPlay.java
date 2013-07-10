@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Color;
 /**
  * Shows how to play music in the framework
  * 
+ * TODO: add short sample play to demonstrate the difference 
+ * 
  * @author Pierre-André Mudry (mui)
  * @version 1.01
  */
@@ -50,7 +52,7 @@ public class DemoMusicPlay extends PortableApplication {
 	public void onInit() {
 		setTitle("Music player, mui 2013");
 		// The song we want to play
-		f = new MusicPlayer("data/Blues-Loop.mp3");
+		f = new MusicPlayer("data/music/Blues-Loop.mp3");
 	}
 
 	@Override

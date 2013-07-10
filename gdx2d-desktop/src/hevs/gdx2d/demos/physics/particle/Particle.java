@@ -15,12 +15,12 @@ import com.badlogic.gdx.physics.box2d.Filter;
  * @version 1.0 
  */
 public class Particle extends PhysicsBox {
-	protected static final BitmapImage img = new BitmapImage("data/texture.png");	
+	protected final BitmapImage img = new BitmapImage("data/images/texture.png");	
 	protected int age = 0;
 	protected final int maxAge;
 			
 	public Particle(Vector2 position, int radius, int maxAge) {
-		super("particle", position, radius, radius, 0.12f, 1f, 1f);
+		super(null, position, radius, radius, 0.12f, 1f, 1f);
 		this.maxAge = maxAge;
 		
 		// Particles should not collide together
@@ -28,7 +28,14 @@ public class Particle extends PhysicsBox {
 		filter.groupIndex = -1;
 		f.setFilterData(filter);			
 	}
-
+	
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO Auto-generated method stub
+		super.finalize();
+		img.dispose();
+	}
+	
 	public boolean shouldbeDestroyed(){
 		return age > maxAge ? true : false;		
 	}
@@ -39,6 +46,8 @@ public class Particle extends PhysicsBox {
 
 	public void render(GdxGraphics g) {
 		final Color col = g.spriteBatch.getColor();
+		final Vector2 pos = getBodyPosition();
+		
 		g.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
 		
 		// Make the particle disappear with time
@@ -46,7 +55,7 @@ public class Particle extends PhysicsBox {
 		
 		// Draw the particle
 		g.spriteBatch.begin();
-			g.spriteBatch.draw(img.getRegion(),(int) body.getPosition().x - img.getImage().getWidth()/2,(int) body.getPosition().y-img.getImage().getHeight()/2);
+			g.spriteBatch.draw(img.getRegion(),pos.x - img.getImage().getWidth()/2,pos.y-img.getImage().getHeight()/2);
 			g.spriteBatch.setColor(col);
 		g.spriteBatch.end();
 	}

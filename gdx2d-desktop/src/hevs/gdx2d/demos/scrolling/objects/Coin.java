@@ -12,12 +12,11 @@ public class Coin implements DrawableObject {
 
 	int posx, posy;	
 	float scale = 0.4f, direction = 0.01f;	
-	BitmapImage img;
+	static final BitmapImage img = new BitmapImage("data/images/retro-coin.png");
 	
 	public Coin(int x, int y){
 		posx = x;
 		posy = y;
-		img = new BitmapImage("data/retro-coin.png");
 	}
 	
 	@Override

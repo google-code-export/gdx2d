@@ -1,28 +1,25 @@
 package hevs.gdx2d.demos.physics.rocket;
 
-import hevs.gdx2d.components.physics.PhysicsStaticBox;
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
-import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
+import hevs.gdx2d.lib.physics.DebugRenderer;
+import hevs.gdx2d.lib.physics.PhysicsWorld;
 import hevs.gdx2d.lib.utils.Logger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * FIXME : encapsulate world with appropriate primitives for synchronized FIXME:
- * finish this Demonstrates the use of applyForce to physics objects
- * 
+ * FIXME finish this Demonstrates the use of applyForce to physics objects
  * 
  * @author Pierre-André Mudry
  * @version 1.0
  */
 public class DemoPhysicsRocket extends PortableApplication {
-	Box2DDebugRenderer dbgRenderer;
+	DebugRenderer dbgRenderer;
 	World world = PhysicsWorld.getInstance();
 	Spaceship ship;
 
@@ -37,11 +34,11 @@ public class DemoPhysicsRocket extends PortableApplication {
 		// No gravity in this world
 		world.setGravity(new Vector2(0, 0));
 
-		dbgRenderer = new Box2DDebugRenderer();
+		dbgRenderer = new DebugRenderer();
 
 		// Create the obstacles in the scene
 		new PhysicsScreenBoundaries(getWindowWidth(), getWindowHeight());
-		new PhysicsStaticBox("wall", new Vector2(250, 250), 100, 10);
+		//new PhysicsStaticBox("wall", new Vector2(250, 250), 100, 10);
 
 		// Our spaceship
 		ship = new Spaceship(new Vector2(getWindowWidth() / 2, getWindowHeight() / 2));
@@ -50,6 +47,7 @@ public class DemoPhysicsRocket extends PortableApplication {
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
 		g.clear();
+		
 		dbgRenderer.render(world, g.getCamera().combined);
 		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 
@@ -84,7 +82,7 @@ public class DemoPhysicsRocket extends PortableApplication {
 			ship.thrustRight = true;
 			break;
 		case Input.Keys.UP:
-			ship.thrustUp = 100000;
+			ship.thrustUp = ship.MAX_THRUST;
 			break;
 
 		default:

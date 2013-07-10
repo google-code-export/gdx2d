@@ -13,10 +13,10 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class PhysicsScreenBoundaries {
 
-	public PhysicsScreenBoundaries(int width, int height) {		 
-		new PhysicsStaticBox("ground", new Vector2(0, 0), width, 5);
-		new PhysicsStaticBox("leftwall", new Vector2(0,0), 5, height);
-		new PhysicsStaticBox("rightwall", new Vector2(width, 0), 5, height);
-		new PhysicsStaticBox("ceiling", new Vector2(0,height), width, 5);
+	public PhysicsScreenBoundaries(float width, float height) {
+		new PhysicsStaticBox("ground", new Vector2(0, 0), width, .5f);
+		new PhysicsStaticBox("leftwall", new Vector2(0,0), .5f, height);
+		new PhysicsStaticBox("rightwall", new Vector2(width, 0), .5f, height);
+		new PhysicsStaticBox("ceiling", new Vector2(0,height), width, .5f);
 	}
 }

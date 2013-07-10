@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
  * A class to stream music without loading it within LibGDX.
  * 
  * @author Pierre-Andre Mudry / mui
- * @version 1.1
+ * @version 1.2
  */
 public class MusicPlayer implements Disposable{
 	protected Music s;
@@ -21,10 +21,6 @@ public class MusicPlayer implements Disposable{
 		Utils.callCheck("hevs.gdx2d.lib.Game2D", "create");		
 	}
 	
-	public boolean isPlaying(){
-		return s.isPlaying();
-	}
-		
 	/**
 	 * Changes volume of the song played
 	 * @param v Should be between 0 and 1
@@ -49,9 +45,24 @@ public class MusicPlayer implements Disposable{
 	 * Stops playing the song
 	 */
 	public void stop(){
-		s.stop();
+		s.stop();		
 	}
-		
+
+	/**
+	 * True if the music is playing, also see 
+	 * @return
+	 */
+	public boolean isPlaying(){
+		return s.isPlaying();
+	}
+
+	/**
+	 * True if the music is playing, also see 
+	 * @return
+	 */
+	public boolean isLooping(){
+		return s.isLooping();
+	}
 
 	/**
 	 * Release resources when done working with them
@@ -69,6 +80,9 @@ public class MusicPlayer implements Disposable{
 		s.setLooping(true);
 	}
 	
+	/**
+	 * Called when the object is destroyed
+	 */
 	@Override
 	protected void finalize() throws Throwable { 
 		super.finalize();

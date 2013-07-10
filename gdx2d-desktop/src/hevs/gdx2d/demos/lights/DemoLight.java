@@ -1,10 +1,12 @@
 package hevs.gdx2d.demos.lights;
 
 import hevs.gdx2d.components.physics.PhysicsCircle;
+import hevs.gdx2d.components.physics.utils.PhysicsConstants;
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
-import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
+import hevs.gdx2d.lib.physics.DebugRenderer;
+import hevs.gdx2d.lib.physics.PhysicsWorld;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,23 +18,24 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Demonstrates the usage of shadows and lights in GDX2D
+ * 
  * @author Pierre-André Mudry (mui)
- * @version 1.04
+ * @version 1.05
  */
 public class DemoLight extends PortableApplication {
 
 	// Physics-related attributes
 	RayHandler rayHandler;
 	World world;
-	Box2DDebugRenderer debugRenderer;
-	ArrayList<Body> list = new ArrayList<Body>();	
+	DebugRenderer debugRenderer;
+	ArrayList<PhysicsCircle> list = new ArrayList<PhysicsCircle>();	
 	
 	// Light related attributes
 	PointLight p;
@@ -56,29 +59,37 @@ public class DemoLight extends PortableApplication {
 		
 		// The light manager
 		rayHandler = new RayHandler(world);
-
-		// This is the light controlled by the mouse click and drag
-		p = new PointLight(rayHandler, 200, Color.YELLOW, 400,
-				this.getWindowWidth() / 2 - 50,
-				this.getWindowHeight() / 2 + 150);
 		
-		p.setDistance(700f);
+        // This is the light controlled by the mouse click and drag
+		p = new PointLight(rayHandler, 200, Color.YELLOW, 10,
+				width / 2 - 50,
+				height / 2 + 150);
+		
+		p.setDistance(10);
 		p.setColor(new Color(0.9f, 0f, 0.9f, 0.9f));
 		p.setActive(false);
 
+		p.setSoft(true);
+		
 		// The two light cones that are always present 
-		c1 = new ConeLight(rayHandler, 200, new Color(1, 1, 1, 0.92f), 800, 0.2f * width, 0.9f * height, 270, 40);		
-		c2 = new ConeLight(rayHandler, 200, new Color(0.1f, 0.1f, 1, 0.92f), 800, 0.8f * width, 0.9f * height, 270, 40);
-				
+		c1 = new ConeLight(rayHandler, 300, new Color(1, 1, 1, 0.92f), 14, 
+				0.2f * width * PhysicsConstants.PIXEL_TO_METERS, 
+				0.9f * height * PhysicsConstants.PIXEL_TO_METERS,
+				270, 40);		
+		c2 = new ConeLight(rayHandler, 300, new Color(0.1f, 0.1f, 1, 0.92f),14, 
+				0.8f * width * PhysicsConstants.PIXEL_TO_METERS, 
+				0.9f * height * PhysicsConstants.PIXEL_TO_METERS,
+				270, 40);
+
 		rayHandler.setCulling(true);
 		rayHandler.setShadows(true);
 		rayHandler.setBlur(true);		
-		rayHandler.setAmbientLight(0.3f);		
+		rayHandler.setAmbientLight(0.4f);		
 
-		new PhysicsScreenBoundaries((int)width, (int)height);
+		new PhysicsScreenBoundaries(width, height);
 		createRandomCircles(10);
 		
-		debugRenderer = new Box2DDebugRenderer();
+		debugRenderer = new DebugRenderer();
 	}
 
 	/**
@@ -92,37 +103,38 @@ public class DemoLight extends PortableApplication {
 		while (n > 0) {
 			Vector2 position = new Vector2((float) (width * Math.random()),(float) (height * Math.random()));
 			PhysicsCircle circle = new PhysicsCircle("circle", position, 10, 1.2f, 1, 0.01f);
-			circle.body.setLinearVelocity(r.nextFloat() * 6, r.nextFloat() * 6);
+			circle.setBodyLinearVelocity(r.nextFloat() * 3, r.nextFloat() * 3);
 			n--;
 			
 			// Only add the body, the rest is useless
-			list.add(circle.body);
+			list.add(circle);
 		}
 	}
 
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
 		if (firstRun) {
-			rayHandler.setCombinedMatrix(g.getCamera().combined);
+			OrthographicCamera other = new OrthographicCamera();
+			other.setToOrtho(false);
+			Matrix4 cmb = other.combined.scl(PhysicsConstants.METERS_TO_PIXELS);
+			rayHandler.setCombinedMatrix(cmb);
 			firstRun = false;
 		}
 
 		g.clear();
 	
-		// Draw all the lights
-//		debugRenderer.render(world, g.getCamera().combined);
-			
 		// Render the blue spheres
-		for (Body b : list) {																		
-			g.drawFilledCircle((int)b.getPosition().x, (int)b.getPosition().y, 12, Color.BLUE);
+		for (PhysicsCircle b : list) {	
+			final Vector2 pos = b.getBodyPosition();
+			g.drawFilledCircle(pos.x, pos.y, 12, Color.BLUE);			
 		}
 		
-		// Render the lights
+		// Render the lights		
 		rayHandler.updateAndRender();
 		
 		// Update the physics
 		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
-		
+				
 		g.drawSchoolLogo();
 		g.drawFPS();				
 	}
@@ -139,13 +151,13 @@ public class DemoLight extends PortableApplication {
 		if(button == Input.Buttons.LEFT)
 		{
 			p.setActive(true);
-			p.setPosition(x, y);
+			p.setPosition(x * PhysicsConstants.PIXEL_TO_METERS, y * PhysicsConstants.PIXEL_TO_METERS);
 		}
 	}
 	
 	@Override
 	public void onDrag(int x, int y) {		
-		p.setPosition(x, y);
+		p.setPosition(x * PhysicsConstants.PIXEL_TO_METERS, y * PhysicsConstants.PIXEL_TO_METERS);
 	}
 	
 	@Override

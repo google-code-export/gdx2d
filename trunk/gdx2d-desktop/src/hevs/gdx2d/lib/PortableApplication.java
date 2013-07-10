@@ -27,6 +27,7 @@ public abstract class PortableApplication implements TouchInterface,
 		KeyboardInterface, GameInterface {
 
 	protected boolean onAndroid;
+
 	private AndroidResolver resolver = null;
 	
 	/**
@@ -215,6 +216,9 @@ public abstract class PortableApplication implements TouchInterface,
 		
 		if (!onAndroid)			
 		{
+			// Not sure if usable
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+			
 			// TODO refactor this more nicely
 			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 			config.resizable = false;
@@ -224,8 +228,8 @@ public abstract class PortableApplication implements TouchInterface,
 			config.fullscreen = false;
 			config.title = "gdx2d application";
 			config.vSyncEnabled = true; // Ignored under Linux						
-			config.foregroundFPS = 60;
-			config.backgroundFPS = 60;
+			config.foregroundFPS = 120; // Target value if vSync not working
+			config.backgroundFPS = config.foregroundFPS;
 			config.samples = 2; // Multi-sampling enables anti-alias for lines
 			
 			String os = System.getProperty("os.name").toLowerCase();
@@ -235,7 +239,7 @@ public abstract class PortableApplication implements TouchInterface,
 			}
 			
 			config.addIcon("data/icon32.png", FileType.Internal);
-			config.addIcon("data/icon64.png", FileType.Internal); // FIXME: icon not showing properly on Ubuntu 10.04			
+			config.addIcon("data/icon64.png", FileType.Internal);			
 			new LwjglApplication(new Game2D(this), config);
 		}
 	}

@@ -19,6 +19,8 @@ import com.badlogic.gdx.Input;
  * Also demonstrates how to delegate render to other
  * objects through the {@link DrawableObject} interface.
  * 
+ * TODO still stutters... Idea : use tweening or interpolator
+ * for translation
  * @author Pierre-André Mudry (mui)
  * @version 1.01 
  */
@@ -60,7 +62,7 @@ public class DemoScrolling extends PortableApplication {
 		toDraw.add(new Cloud(1000, 370));			
 	};
 	
-	int travelSpeed = 2;
+	float travelSpeed = 2f;
 	boolean scrolling = true;
 	
 	@Override
@@ -75,8 +77,8 @@ public class DemoScrolling extends PortableApplication {
 		g.zoom((float)zoom);
 		
 		/**
-		 * Handle input (not done using the inherited method onKeyDown
-		 * because we don'scale want to release the key for the zoom to occur 
+		 * Handle input (not done using the inherited method onKeyDown)
+		 * because we don't want to release the key for the zoom to occur 
 		 */
 		if(Gdx.input.isKeyPressed(Input.Keys.W))		
 			zoom += 0.02;		
@@ -102,7 +104,6 @@ public class DemoScrolling extends PortableApplication {
 		g.drawFPS();
 	}		
 		
-	
 	public static void main(String[] args) {
 		new DemoScrolling(false);
 	}

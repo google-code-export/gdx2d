@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -21,7 +22,7 @@ import com.badlogic.gdx.utils.Disposable;
  * 
  * @author Pierre-André Mudry (mui)
  * @author Nils Chatton (chn)
- * @version 1.13
+ * @version 1.14
  */
 public class GdxGraphics implements Disposable
 {
@@ -145,6 +146,13 @@ public class GdxGraphics implements Disposable
 		return Gdx.graphics.getWidth();
 	}
 	
+	/**
+	 * @param x 
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param angle in degrees
+	 */
 	public void drawRectangle(float x, float y, float w, float h, float angle) {
 		shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(currentColor);
@@ -281,8 +289,8 @@ public class GdxGraphics implements Disposable
 		spriteBatch.end();
 	}
 
+	@Deprecated
 	public void drawString(float posX, float posY, String str, Color color, float size) {
-		// FIXME Scaling does not work properly, should use another texture per size
 		spriteBatch.begin();
 			font.setScale(size);		
 			font.setColor(color);		
@@ -292,10 +300,35 @@ public class GdxGraphics implements Disposable
 	}
 
 	/**
+	 * Draws a string with a specific font
+	 * @param posX
+	 * @param posY
+	 * @param str
+	 * @param f
+	 */
+	public void drawString(float posX, float posY, String str, BitmapFont f){
+		spriteBatch.begin();
+			f.drawMultiLine(spriteBatch, str, posX, posY);
+		spriteBatch.end();		
+	}
+	
+	/**
+	 * Draws a string in the middle of the screen with a specific font
+	 * @param posY
+	 * @param str
+	 * @param f
+	 */
+	public void drawStringCentered(float posY, String str, BitmapFont f){
+		float w = f.getBounds(str).width;
+		drawString((getScreenWidth() - w )/ 2.0f, posY, str, f);
+	}
+	
+	
+	/**
 	 * Draws an image in the background that will not move with the camera
 	 * @param t 
-	 * @param i
-	 * @param j
+	 * @param i x coordinate in the screen space
+	 * @param j y coordinate in the screen space
 	 */
 	public void drawBackground(BitmapImage t, float i, float j){
 		drawBackground(t.getImage(), i, j);
@@ -304,8 +337,8 @@ public class GdxGraphics implements Disposable
 	/**
 	 * Draws a texture in background that will not move with the camera
 	 * @param t
-	 * @param i
-	 * @param j
+	 * @param i x coordinate in the screen space
+	 * @param j y coordinate in the screen space
 	 */
 	public void drawBackground(Texture t, float i, float j){
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
@@ -318,7 +351,7 @@ public class GdxGraphics implements Disposable
 		
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
-	
+			
 	/**
 	 * Draws a {@link Texture} directly on screen
 	 * @param t the texture to draw
@@ -326,7 +359,7 @@ public class GdxGraphics implements Disposable
 	 * @param j y position of the texture
 	 * @param blending if blending should be enable or not. For performance reasons, blending is preferrably
 	 * disabled for large texture if not required.
-	 * @deprecated Use {@link #drawAlphaImage)
+	 * @deprecated Use {@link #drawAlphaPicture)
 	 */
 	@Deprecated
 	public void drawTexture(Texture t, int i, int j, boolean blending) {
@@ -383,6 +416,31 @@ public class GdxGraphics implements Disposable
 		spriteBatch.end();
 	}
 
+	/**
+	 * Draws a picture at position {@code pos} with a selectable alpha (transparency). See {@link #drawAlphaPicture(float, float, float, float, float, float, float, BitmapImage)}
+	 * @param pos
+	 * @param alpha
+	 * @param img
+	 */
+	public void drawAlphaPicture(Vector2 pos, float alpha, BitmapImage img){
+		drawAlphaPicture(pos.x, pos.y, alpha, img);
+	}
+
+	public void drawAlphaPicture(float posX, float posY, float scale, float alpha, BitmapImage img){
+		drawAlphaPicture(posX, posY, img.getImage().getWidth() / 2, img.getImage().getHeight() / 2, 0, 1.0f, alpha, img);
+	}
+	
+	public void drawAlphaPicture(float posX, float posY, float alpha, BitmapImage img){
+		drawAlphaPicture(posX, posY, img.getImage().getWidth() / 2, img.getImage().getHeight() / 2, 0, 1.0f, alpha, img);
+	}
+	
+	public void drawAlphaPicture(float posX, float posY, float centerX, float centerY, float angle, float scale, float alpha, BitmapImage img){		
+		Color old = spriteBatch.getColor();
+		spriteBatch.setColor(1.0f, 1.0f, 1.0f, alpha);
+		drawTransformedPicture(posX, posY, angle, scale, img);
+		spriteBatch.setColor(old);
+	}
+	
 	public void drawPolygon(Polygon p) {
 		shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(currentColor);

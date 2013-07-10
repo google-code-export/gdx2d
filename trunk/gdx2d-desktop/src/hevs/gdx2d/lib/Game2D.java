@@ -1,11 +1,6 @@
 package hevs.gdx2d.lib;
 
-import hevs.gdx2d.components.physics.utils.PhysicsWorld;
-import hevs.gdx2d.lib.interfaces.AndroidResolver;
-
-import java.security.InvalidParameterException;
-import java.util.Timer;
-import java.util.TimerTask;
+import hevs.gdx2d.lib.physics.PhysicsWorld;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
@@ -38,28 +33,6 @@ public class Game2D implements ApplicationListener {
 	protected int angle;
 	protected SpriteBatch batch;
 
-	// Use a second thread for game logic updates
-	Timer t;
-	protected static final int LOGIC_UPDATES_PER_SECOND = 1000;
-	protected static int logicRefreshFps = LOGIC_UPDATES_PER_SECOND;
-
-	/**
-	 * Changes the rate at which the updates are called for the logic part of
-	 * the game. Default is 1000 updates per second.
-	 * 
-	 * @param fps
-	 */
-	public void setLogicRefreshRate(int fps) {
-		try {
-			if (fps <= 0)
-				throw new InvalidParameterException(
-						"Invalid rate for update, should be > 0");
-			logicRefreshFps = fps;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Default constructor
 	 * 
@@ -76,7 +49,7 @@ public class Game2D implements ApplicationListener {
 
 		// Log level for the application
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		Gdx.app.log("[GDX2Dlib]", "version " + Version.version);
+		Gdx.app.log("[GDX2Dlib]", "Version " + Version.version);
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(),
@@ -139,8 +112,7 @@ public class Game2D implements ApplicationListener {
 		multiplexer.addProcessor(new InputProcessor() {
 
 			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer,
-					int button) {
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 				app.onRelease(screenX, screenY, button);
 				return false;
 			}
@@ -152,8 +124,7 @@ public class Game2D implements ApplicationListener {
 			}
 
 			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer,
-					int button) {
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				app.onClick(screenX, Gdx.graphics.getHeight() - screenY, button);
 				return false;
 			}
@@ -194,16 +165,6 @@ public class Game2D implements ApplicationListener {
 
 		// Initialize app
 		app.onInit();
-
-		// A fixed rate timer that schedules the application game updates
-		t = new Timer();
-		t.scheduleAtFixedRate(new TimerTask() {
-
-			@Override
-			public void run() {
-				app.onGameLogicUpdate();
-			}
-		}, 0, 1000 / logicRefreshFps);
 	}
 
 	/**
@@ -226,7 +187,6 @@ public class Game2D implements ApplicationListener {
 	 */
 	@Override
 	public void pause() {
-		t.cancel();
 		app.onPause();
 	}
 
@@ -235,13 +195,6 @@ public class Game2D implements ApplicationListener {
 	 */
 	@Override
 	public void resume() {
-		t = new Timer();
-		t.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				app.onGameLogicUpdate();
-			}
-		}, 0, 1000 / logicRefreshFps);
 		app.onResume();
 	}
 

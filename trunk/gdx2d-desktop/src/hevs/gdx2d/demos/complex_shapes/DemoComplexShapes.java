@@ -91,7 +91,7 @@ public class DemoComplexShapes extends PortableApplication {
 		screenHeight = getWindowHeight();
 		maxRadius = Math.min(getWindowHeight() / 2, getWindowWidth() / 2) - 10;
 
-		imageBmp = new BitmapImage("data/Android_PI_48x48.png");
+		imageBmp = new BitmapImage("data/images/Android_PI_48x48.png");
 		generateObjects(N_SHAPES);
 	}
 
@@ -130,7 +130,7 @@ public class DemoComplexShapes extends PortableApplication {
 		case RECT:
 			g.clear(Color.BLACK);
 			for (DrawableShape i : shapes)
-				// FIXME does not work under Linux, has to be fixed
+				// FIXME Did not work well for old Linux driver
 				g.drawFilledRectangle(i.x, i.y, i.width, i.width, 0, i.c);
 		default:
 			break;

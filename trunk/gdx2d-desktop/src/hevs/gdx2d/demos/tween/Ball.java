@@ -5,7 +5,7 @@ import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.interfaces.DrawableObject;
 
 /**
- * A simple ball object that will be drawn with tweening.
+ * A simple ball object
  * 
  * @author Pierre-André Mudry (mui)
  * @author Christopher Metrailler (mei)
@@ -13,7 +13,7 @@ import hevs.gdx2d.lib.interfaces.DrawableObject;
  */
 public class Ball implements DrawableObject {
 	public float posx, posy;
-	final BitmapImage img = new BitmapImage("data/soccer.png");;
+	final BitmapImage img = new BitmapImage("data/images/soccer.png");
 
 	public Ball(float x, float y) {
 		posx = x;

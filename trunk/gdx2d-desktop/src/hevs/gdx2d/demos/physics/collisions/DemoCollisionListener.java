@@ -1,13 +1,13 @@
 package hevs.gdx2d.demos.physics.collisions;
 
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
-import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
+import hevs.gdx2d.lib.physics.DebugRenderer;
+import hevs.gdx2d.lib.physics.PhysicsWorld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -17,7 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class DemoCollisionListener extends PortableApplication{	
 	World world = PhysicsWorld.getInstance();	
-	Box2DDebugRenderer dbgRenderer;	
+	DebugRenderer dbgRenderer;	
 	
 	int time = 0;
 	
@@ -25,7 +25,7 @@ public class DemoCollisionListener extends PortableApplication{
 	
 	@Override
 	public void onInit() {
-		dbgRenderer = new Box2DDebugRenderer();
+		dbgRenderer = new DebugRenderer();
 		setTitle("Collision demo for box2d, mui 2013");
 		
 		new PhysicsScreenBoundaries(getWindowWidth(), getWindowHeight());

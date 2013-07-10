@@ -1,8 +1,9 @@
 package hevs.gdx2d.demos.physics.particle;
 
-import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
+import hevs.gdx2d.lib.physics.DebugRenderer;
+import hevs.gdx2d.lib.physics.PhysicsWorld;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -12,7 +13,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -20,25 +20,25 @@ import com.badlogic.gdx.physics.box2d.World;
  * no boundaries.
  * 
  * @author Pierre-Andre Mudry (mui)
- * @version 1.01
+ * @version 1.1
  */
 public class DemoParticlePhysics extends PortableApplication {
-	Box2DDebugRenderer dbgRenderer;
-	World w = PhysicsWorld.getInstance();
+	DebugRenderer dbgRenderer;
+	World world = PhysicsWorld.getInstance();
 
 	// Particle creation related
 	boolean mouseActive = false;
 	public int CREATION_RATE = 2;
-	public final int MAX_AGE = 20;
+	public final int MAX_AGE = 25;
 	Vector2 position;
 
 	@Override
 	public void onInit() {
 		setTitle("Particle physics, mui 2013");
-		dbgRenderer = new Box2DDebugRenderer();
-		w.setGravity(new Vector2(0,0));
+		dbgRenderer = new DebugRenderer();
+		world.setGravity(new Vector2(0,0));
 		Gdx.app.log("[DemoParticlePhysics]", "Click on screen to create particles");
-		Gdx.app.log("[DemoParticlePhysics]", "+/- change the creation rate of particles");
+		Gdx.app.log("[DemoParticlePhysics]", "a/s change the creation rate of particles");
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class DemoParticlePhysics extends PortableApplication {
 		g.clear();
  
 		Vector<Particle> toBeRemoved = new Vector<Particle>();
-		Iterator<Body> it = w.getBodies();
+		Iterator<Body> it = world.getBodies();
 
 		while (it.hasNext()) {
 			Body p = it.next();
@@ -70,10 +70,10 @@ public class DemoParticlePhysics extends PortableApplication {
 		// Remove the particles that shall be destroyed
 		toBeRemoved.clear();
 
-		if (mouseActive)
-			createParticles();
+		if (mouseActive){
+			createParticles();			
+		}
 			
-		//dbgRenderer.render(world, g.getCamera().combined);
 		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 		
 		g.drawSchoolLogo();
@@ -82,15 +82,15 @@ public class DemoParticlePhysics extends PortableApplication {
 
 	static final Random rand = new Random();
 	
-	void createParticles() {		
+	void createParticles() {				
 		for(int i = 0; i < CREATION_RATE; i++){
 			Particle c = new Particle(position, 5, MAX_AGE + rand.nextInt(MAX_AGE / 2));
 			
 			// Apply a vertical force with some random horizontal component
 			Vector2 force = new Vector2();			
-			force.x = rand.nextFloat() * 150 * (rand.nextBoolean() == true ? -1 : 1);
-			force.y = rand.nextFloat() * 150 * (rand.nextBoolean() == true ? -1 : 1);
-			c.body.applyLinearImpulse(force, position, true);
+			force.x = rand.nextFloat() * 0.00095f * (rand.nextBoolean() == true ? -1 : 1);
+			force.y = rand.nextFloat() * 0.00095f * (rand.nextBoolean() == true ? -1 : 1);
+			c.applyBodyLinearImpulse(force, position, true);
 		}
 	}
 	
@@ -119,10 +119,10 @@ public class DemoParticlePhysics extends PortableApplication {
 	@Override
 	public void onKeyDown(int keycode) {	
 		super.onKeyDown(keycode);
-		if(keycode == Input.Keys.PLUS){
+		if(keycode == Input.Keys.A){
 			CREATION_RATE++;			
 		}
-		if(keycode == Input.Keys.MINUS){
+		if(keycode == Input.Keys.S){
 			CREATION_RATE = CREATION_RATE > 1 ? CREATION_RATE - 1 : CREATION_RATE;
 		}
 		Gdx.app.log("[DemoParticlePhysics]", "Creation rate is now " + CREATION_RATE);

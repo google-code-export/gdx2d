@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Interpolation;
  */
 public class DemoPositionInterpolator extends PortableApplication {
 
-	private Ball ball1, ball2, ball3, ball4, ball5, ball6, ball7, ball8;
+	private Ball[] balls;
 	private int height, width, margin;
 
 	public DemoPositionInterpolator(boolean onAndroid) {
@@ -28,20 +28,16 @@ public class DemoPositionInterpolator extends PortableApplication {
 
 	@Override
 	public void onInit() {
-		setTitle("Position interpolators, mei 2013");
+		setTitle("Position interpolators, mei/mui 2013");
 
 		margin = Gdx.graphics.getWidth() / 8;
 		height = Gdx.graphics.getHeight();
 		width = Gdx.graphics.getWidth();
 
-		ball1 = new Ball(margin, height * 1 / 10f);
-		ball2 = new Ball(margin, height * 2 / 10f);
-		ball3 = new Ball(margin, height * 3 / 10f);
-		ball4 = new Ball(margin, height * 4 / 10f);
-		ball5 = new Ball(margin, height * 5 / 10f);
-		ball6 = new Ball(margin, height * 6 / 10f);
-		ball7 = new Ball(margin, height * 7 / 10f);
-		ball8 = new Ball(margin, height * 8 / 10f);
+		balls = new Ball[8];
+		
+		for(int i = 0; i < 8; i++)
+			balls[i]= new Ball(margin, height * (i + 1) / 10f);
 	}
 	
 	@Override
@@ -54,14 +50,14 @@ public class DemoPositionInterpolator extends PortableApplication {
 		final float start = margin;
 		final float end = width - margin;
 		
-		ball1.posx = Interpolation.linear.apply(start, end, animationPercentage);
-		ball2.posx = Interpolation.elastic.apply(start, end, animationPercentage);
-		ball3.posx = Interpolation.sine.apply(start, end, animationPercentage);
-		ball4.posx = Interpolation.bounce.apply(start, end, animationPercentage);
-		ball5.posx = Interpolation.circle.apply(start, end, animationPercentage);
-		ball6.posx = Interpolation.swing.apply(start, end, animationPercentage);
-		ball7.posx = Interpolation.pow2.apply(start, end, animationPercentage);
-		ball8.posx = Interpolation.exp10.apply(start, end, animationPercentage);
+		balls[0].posx = Interpolation.linear.apply(start, end, animationPercentage);
+		balls[1].posx = Interpolation.elastic.apply(start, end, animationPercentage);
+		balls[2].posx = Interpolation.sine.apply(start, end, animationPercentage);
+		balls[3].posx = Interpolation.bounce.apply(start, end, animationPercentage);
+		balls[4].posx = Interpolation.circle.apply(start, end, animationPercentage);
+		balls[5].posx = Interpolation.swing.apply(start, end, animationPercentage);
+		balls[6].posx = Interpolation.pow2.apply(start, end, animationPercentage);
+		balls[7].posx = Interpolation.exp10.apply(start, end, animationPercentage);
 
 		// Do the drawing
 		g.clear();
@@ -72,14 +68,9 @@ public class DemoPositionInterpolator extends PortableApplication {
 		g.drawLine(width - margin, height * 1 / 10f, width - margin, height * 8 / 10f);
 		
 		// Draw the balls
-		ball1.draw(g, 0.5f);
-		ball2.draw(g, 0.5f);
-		ball3.draw(g, 0.5f);
-		ball4.draw(g, 0.5f);
-		ball5.draw(g, 0.5f);
-		ball6.draw(g, 0.5f);
-		ball7.draw(g, 0.5f);
-		ball8.draw(g, 0.5f);
+		for (int i = 0; i < balls.length; i++) {
+			balls[i].draw(g, 0.5f);
+		}
 
 		g.drawFPS();
 		g.drawSchoolLogoUpperRight();

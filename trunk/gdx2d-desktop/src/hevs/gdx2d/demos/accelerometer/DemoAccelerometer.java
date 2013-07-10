@@ -49,7 +49,7 @@ public class DemoAccelerometer extends PortableApplication {
 			Gdx.app.exit();
 		}
 		
-		compassBitmap = new BitmapImage("data/compass_150.png");
+		compassBitmap = new BitmapImage("data/images/compass_150.png");
 	}
 
 	public DemoAccelerometer(boolean onAndroid) {

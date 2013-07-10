@@ -12,41 +12,37 @@ public class Spaceship implements DrawableObject {
 	
 	// Motor related
 	boolean thrustLeft = false, thrustRight = false;
-	int thrustUp = 0;
+	float thrustUp = 0;
 	
 	// Drawing related
-	final static BitmapImage shipImage = new BitmapImage("data/rocket_128.png");
-	final static BitmapImage flameImage = new BitmapImage("data/flame.png");
-	final float RAD2DEG = 57.2957795f;
+	final static BitmapImage shipImage = new BitmapImage("data/images/rocket_128.png");
+	final static BitmapImage flameImage = new BitmapImage("data/images/flame.png");
+	
+	final float MAX_THRUST = 2f;
+	final float MAX_TORQUE = 0.08f;
 
 	public Spaceship(Vector2 position) {
 		box = new PhysicsBox("ship", position, 30, 30, 0.61f, 0.2f, 0.2f);
-		box.body.setAngularDamping(0.2f);
-		box.body.setLinearDamping(0.2f);
+		box.setBodyAngularDamping(0.4f);
+		box.setBodyLinearDamping(0.2f);
 	}
 
 	@Override
 	public void draw(GdxGraphics g) {
-		// Positions to apply torque (NOT USED AT THE MOMENT)
-		Vector2 leftT = box.body.getPosition();
-		leftT.add(-5, -5);
-		Vector2 rightT = box.body.getPosition();
-		rightT.add(5, 5);
-
 		// Make the ship turn if required
 		if (thrustLeft)
-			box.body.applyTorque(1200000, true);
+			box.applyBodyTorque(MAX_TORQUE, true);
+		
 		if (thrustRight)
-			box.body.applyTorque(-1200000, true);
+			box.applyBodyTorque(-MAX_TORQUE, true);
 
 		// Let's move the ship with a force
-		box.body.applyForceToCenter((float) Math.cos(box.body.getAngle()) * thrustUp,
-				(float) Math.sin(box.body.getAngle()) * thrustUp, true);
+		box.applyBodyForceToCenter((float) Math.cos(box.getBodyAngle()) * thrustUp,
+				(float) Math.sin(box.getBodyAngle()) * thrustUp, true);
 
-		// Draw the ship
-		g.drawTransformedPicture(box.body.getPosition().x,
-				box.body.getPosition().y,
-				box.body.getAngle() * RAD2DEG, .5f, shipImage);
+		// Draws the ship
+		Vector2 pos = box.getBodyPosition();
+		g.drawTransformedPicture(pos.x,	pos.y, box.getBodyAngleDeg(), .5f, shipImage);
 		
 		// Draw the flame
 		// FIXME this is not working

@@ -1,28 +1,31 @@
 package hevs.gdx2d.demos.physics;
 
 import hevs.gdx2d.components.physics.PhysicsBox;
+import hevs.gdx2d.components.physics.PhysicsCircle;
 import hevs.gdx2d.components.physics.PhysicsStaticBox;
 import hevs.gdx2d.components.physics.utils.PhysicsScreenBoundaries;
-import hevs.gdx2d.components.physics.utils.PhysicsWorld;
 import hevs.gdx2d.lib.GdxGraphics;
 import hevs.gdx2d.lib.PortableApplication;
+import hevs.gdx2d.lib.physics.DebugRenderer;
+import hevs.gdx2d.lib.physics.PhysicsWorld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Demonstrates the basic usage of the physics with a simple demo
+ * 
  * @author Pierre-André Mudry (mui)
- * @version 1.01
+ * @version 1.13
  */
 public class DemoSimplePhysics extends PortableApplication{
 
 	// Contains all the objects that will be simulated
 	World world = PhysicsWorld.getInstance();
-	PhysicsBox box;
-	Box2DDebugRenderer debugRenderer;
+	PhysicsCircle box;
+	DebugRenderer debugRenderer;
 	
 	public DemoSimplePhysics(boolean onAndroid) {	
 		super(onAndroid);
@@ -38,31 +41,29 @@ public class DemoSimplePhysics extends PortableApplication{
 		new PhysicsScreenBoundaries(w, h);
 		
 		// The slope on which the objects roll
-		new PhysicsStaticBox("slope", new Vector2(w/2, h/2), w/3, 2, (float)Math.PI / 12.0f);		
+		new PhysicsStaticBox("slope", new Vector2(w/2, h/2), w/3, 8, (float)Math.PI / 12.0f);		
 		
-		// Build the ball
-		box = new PhysicsBox("falling_box", new Vector2(w/2, h-0.1f*h), 18, 18, 15, 0.2f, 0.1f);		
-		box.body.setLinearVelocity(-1, 0);
+		// Build the falling object
+		box = new PhysicsCircle("none", new Vector2(w*0.7f, h-0.1f*h), 12, 0.5f, 0.3f, 0.3f);
+		box.setBodyLinearVelocity(-1f, 1);
 		
 		// Build the dominoes
 		int nDominoes = 20;
-		int dominoSpace = (w - 80) / nDominoes;
+		int dominoSpace = (w - 60) / nDominoes;
 			
 		for (int i = 0; i < nDominoes ; i++) {
-			new PhysicsBox("box" + i, new Vector2(80+i*dominoSpace, 120), 3, 30, 0.1f, 0.1f, 0.3f);			
+			new PhysicsBox("box" + i, new Vector2(60+i*dominoSpace, 120), 3, 30, 0.1f, 0.1f, 0.3f);			
 		}
 		
-		debugRenderer = new Box2DDebugRenderer();		
+		debugRenderer = new DebugRenderer();
 	}
 
+	Matrix4 debugM;
+	
 	@Override
-	public void onGraphicRender(GdxGraphics g) {
+	public void onGraphicRender(GdxGraphics g) {				
 		g.clear();
 		
-		/**
-		 *  The synchronized primitive is required because we use an object in two
-		 *  different threads
-		 */		
 		debugRenderer.render(world, g.getCamera().combined);
 		PhysicsWorld.updatePhysics(Gdx.graphics.getRawDeltaTime());		
 		

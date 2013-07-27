@@ -169,7 +169,7 @@ public class GdxGraphics implements Disposable
 		 */
 		
 		// Mode should be put on sprite, this is not a mistake
-//		checkmode(t_rendering_mode.SPRITE);
+		checkmode(t_rendering_mode.SPRITE);
 		Gdx.gl20.glLineWidth(width);
 	}	
 		

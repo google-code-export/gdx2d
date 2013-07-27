@@ -12,12 +12,13 @@ import com.badlogic.gdx.physics.box2d.Filter;
 /**
  * Demonstrates how to render particles
  * @author Pierre-André Mudry (mui)
- * @version 1.0 
+ * @version 1.1
  */
 public class Particle extends PhysicsBox {
-	protected final BitmapImage img = new BitmapImage("data/images/texture.png");	
+	protected static final BitmapImage img = new BitmapImage("data/images/texture.png");	
 	protected int age = 0;
 	protected final int maxAge;
+	private boolean init = false;
 			
 	public Particle(Vector2 position, int radius, int maxAge) {
 		super(null, position, radius, radius, 0.12f, 1f, 1f);
@@ -31,7 +32,6 @@ public class Particle extends PhysicsBox {
 	
 	@Override
 	protected void finalize() throws Throwable {
-		// TODO Auto-generated method stub
 		super.finalize();
 		img.dispose();
 	}
@@ -48,15 +48,16 @@ public class Particle extends PhysicsBox {
 		final Color col = g.spriteBatch.getColor();
 		final Vector2 pos = getBodyPosition();
 		
-		g.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-		
+		if(!init){
+			g.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+			init = true;
+		}
+			
 		// Make the particle disappear with time
-		g.spriteBatch.setColor(.5f, 0.7f, 0.9f, 1.0f - age / (float) (maxAge+10));
+		g.spriteBatch.setColor(.5f, 0.7f, 0.9f, 1.0f - age / (float) (maxAge+5));
 		
 		// Draw the particle
-		g.spriteBatch.begin();
-			g.spriteBatch.draw(img.getRegion(),pos.x - img.getImage().getWidth()/2,pos.y-img.getImage().getHeight()/2);
-			g.spriteBatch.setColor(col);
-		g.spriteBatch.end();
+		g.spriteBatch.draw(img.getRegion(),pos.x - img.getImage().getWidth()/2,pos.y-img.getImage().getHeight()/2);
+		g.spriteBatch.setColor(col);
 	}
 }

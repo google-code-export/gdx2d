@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.Disposable;
  * 
  * @author Pierre-André Mudry (mui)
  * @author Nils Chatton (chn)
- * @version 1.14
+ * @version 1.5
  */
 public class GdxGraphics implements Disposable
 {
@@ -31,12 +31,15 @@ public class GdxGraphics implements Disposable
 	 */
 	protected OrthographicCamera camera, fixedcamera;	
 	
-	protected ShapeRenderer shapeRenderer;
+	public ShapeRenderer shapeRenderer;
 	protected Color currentColor = Color.WHITE;
 	protected Color backgroundColor = Color.BLACK;
 	public SpriteBatch spriteBatch;
 
 	protected BitmapFont font;
+	
+	private enum t_rendering_mode {SHAPE_FILLED, SHAPE_LINE, SHAPE_POINT, SPRITE}; 
+	private t_rendering_mode rendering_mode = t_rendering_mode.SPRITE; 
 
 	// For sprite-based circles
 	Sprite sprite;					
@@ -44,6 +47,15 @@ public class GdxGraphics implements Disposable
 	// For sprite-based logo
 	final protected Texture logoTex = new Texture(Gdx.files.internal("data/logo_hes.png"));;	
 	final protected Texture circleTex = new Texture(Gdx.files.internal("data/circle.png"));;
+	
+	/**
+	 * When rendering with other methods than the one present here (for instance
+	 * when using box2dlight), call this method to render shapes correctly
+	 */
+	public void resetRenderingMode(){
+		checkmode(t_rendering_mode.SPRITE);
+		checkmode(t_rendering_mode.SHAPE_LINE);
+	}
 	
 	public GdxGraphics(ShapeRenderer shapeRenderer2, SpriteBatch spriteBatch, OrthographicCamera camera) {
 		this.shapeRenderer = shapeRenderer2;
@@ -70,7 +82,6 @@ public class GdxGraphics implements Disposable
 		circleTex.dispose();		
 		font.dispose();
 		spriteBatch.dispose();
-		
 	}
 	
 	/**
@@ -89,47 +100,77 @@ public class GdxGraphics implements Disposable
 	 * Draws school logo
 	 */
 	public void drawSchoolLogo(){
+		checkmode(t_rendering_mode.SPRITE);
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
-		spriteBatch.begin();
-			spriteBatch.draw(logoTex, getScreenWidth() - logoTex.getWidth(), 0);
-		spriteBatch.end();		
+		spriteBatch.draw(logoTex, getScreenWidth() - logoTex.getWidth(), 0);
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
 	
+	public void checkmode(t_rendering_mode mode) {
+		if(mode == rendering_mode)
+			return;
+	
+		if(rendering_mode != t_rendering_mode.SPRITE){
+			shapeRenderer.end();
+		}
+	
+		if(rendering_mode == t_rendering_mode.SPRITE)
+		{
+			spriteBatch.end();
+		}
+		
+		switch (mode) {
+		case SHAPE_LINE:
+			shapeRenderer.begin(ShapeType.Line);
+			rendering_mode = t_rendering_mode.SHAPE_LINE;
+			break;
+
+		case SHAPE_FILLED:
+			shapeRenderer.begin(ShapeType.Filled);
+			rendering_mode = t_rendering_mode.SHAPE_FILLED;
+			break;
+			
+		case SHAPE_POINT:
+			shapeRenderer.begin(ShapeType.Point);
+			rendering_mode = t_rendering_mode.SHAPE_POINT;
+			break;
+			
+		case SPRITE:	
+			spriteBatch.begin();
+			rendering_mode = t_rendering_mode.SPRITE;
+			break;
+		}	
+		
+	}
+
 	/**
 	 * Draws the school logo in the upper right corner of the screen
 	 */
 	public void drawSchoolLogoUpperRight(){
+		checkmode(t_rendering_mode.SPRITE);
 		int width = Gdx.graphics.getWidth();
 		int height = Gdx.graphics.getHeight();
 
 		spriteBatch.setProjectionMatrix(fixedcamera.combined);
-		spriteBatch.begin();
+//		spriteBatch.begin();
 			spriteBatch.draw(logoTex, width - logoTex.getWidth(), height - logoTex.getHeight());
-		spriteBatch.end();
+//		spriteBatch.end();
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
 	
 	/**
-	 * Draws the school logo in the upper right corner of the screen
-	 * @param moveWithCamera
-	 * @deprecated use now {@link #drawSchoolLogoUpperRight()}
+	 * A very simple way to change line width for shape operators (line, ...)
+	 * @param width
 	 */
-	@Deprecated
-	public void drawSchoolLogoUpperRight(boolean moveWithCamera){
-		int width = Gdx.graphics.getWidth();
-		int height = Gdx.graphics.getHeight();
-
-		spriteBatch.setProjectionMatrix(fixedcamera.combined);
-		spriteBatch.begin();
-			spriteBatch.draw(logoTex, width - logoTex.getWidth(), height - logoTex.getHeight());
-		spriteBatch.end();
-		spriteBatch.setProjectionMatrix(camera.combined);
-	}
-	
-	// FIXME : implement this
 	public void setPenWidth(float width){
-		new UnsupportedOperationException("Not implemented yet, sorry !");
+		/**
+		 * TODO : Line capping is not working nicely for non vertical lines in OpenGL.
+		 * This is a known problem but at the moment we have decided not to implement
+		 */
+		
+		// Mode should be put on sprite, this is not a mistake
+//		checkmode(t_rendering_mode.SPRITE);
+		Gdx.gl20.glLineWidth(width);
 	}	
 		
 	/**
@@ -154,23 +195,25 @@ public class GdxGraphics implements Disposable
 	 * @param angle in degrees
 	 */
 	public void drawRectangle(float x, float y, float w, float h, float angle) {
-		shapeRenderer.begin(ShapeType.Line);
+		checkmode(t_rendering_mode.SHAPE_LINE);
+//		shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(currentColor);
 			shapeRenderer.identity();
 			shapeRenderer.translate(x + w / 2, y + w / 2, 0);
 			shapeRenderer.rotate(0, 0, 1, angle);
 			shapeRenderer.rect(-w / 2, -w / 2, w, h);
-		shapeRenderer.end();
+//		shapeRenderer.end();
 	}
 
 	/**
 	 * Clears the screen black
 	 */
 	public void clear() {
-		Gdx.gl.glClearColor(0, 0, 0, 1);		
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		clear(Color.BLACK);
 	}
 
+	boolean first = true;
+	
 	/**
 	 * Clears the screen with a given color
 	 * @param c
@@ -178,6 +221,14 @@ public class GdxGraphics implements Disposable
 	public void clear(Color c) {
 		Gdx.gl.glClearColor(c.r, c.g, c.b, c.a);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		if(!first && rendering_mode == t_rendering_mode.SPRITE)
+			spriteBatch.end();
+		else
+			first = !first;
+		
+		if(rendering_mode == t_rendering_mode.SPRITE)
+			spriteBatch.begin();
 	}
 
 	/**
@@ -194,11 +245,12 @@ public class GdxGraphics implements Disposable
 	 * @param y
 	 */
 	public void setPixel(float x, float y) {
-		shapeRenderer.begin(ShapeType.Point);
-		shapeRenderer.identity();
+//		shapeRenderer.begin(ShapeType.Point);
+		checkmode(t_rendering_mode.SHAPE_POINT);
+			shapeRenderer.identity();
 			shapeRenderer.setColor(currentColor);
 			shapeRenderer.point(x, y, 0);
-		shapeRenderer.end();
+//		shapeRenderer.end();
 	}
 
 	/**
@@ -208,27 +260,27 @@ public class GdxGraphics implements Disposable
 	 * @param c
 	 */
 	public void setPixel(float x, float y, Color c) {
-		shapeRenderer.begin(ShapeType.Point);
-		shapeRenderer.identity();
+		checkmode(t_rendering_mode.SHAPE_POINT);
+//		shapeRenderer.begin(ShapeType.Point);
+			shapeRenderer.identity();
 			shapeRenderer.setColor(c);
 			shapeRenderer.point(x, y, 0);
-		shapeRenderer.end();
+//		shapeRenderer.end();
 	}
 		
 	public void clearPixel(float x, float y) {
-		shapeRenderer.begin(ShapeType.Point);
+		checkmode(t_rendering_mode.SHAPE_POINT);
+//		shapeRenderer.begin(ShapeType.Point);
 			shapeRenderer.identity();
 			shapeRenderer.setColor(backgroundColor);
 			shapeRenderer.point(x, y, 0);
-		shapeRenderer.end();
+//		shapeRenderer.end();
 	}
 
 	public void drawLine(float p1x, float p1y, float p2x, float p2y) {
-		shapeRenderer.begin(ShapeType.Line);		
-			shapeRenderer.identity();
-			shapeRenderer.setColor(currentColor);
-			shapeRenderer.line(p1x, p1y, p2x, p2y);
-		shapeRenderer.end();
+		checkmode(t_rendering_mode.SHAPE_LINE);
+		shapeRenderer.setColor(currentColor);
+		shapeRenderer.line(p1x, p1y, p2x, p2y);		
 	}
 
 	public void drawLine(float p1x, float p1y, float p2x, float p2y, Color c) {
@@ -237,12 +289,13 @@ public class GdxGraphics implements Disposable
 	}
 
 	public void drawFilledRectangle(float x, float y, float w, float h, float angle) {
-		shapeRenderer.begin(ShapeType.Filled);
+		checkmode(t_rendering_mode.SHAPE_FILLED);
+//		shapeRenderer.begin(ShapeType.Filled);
 			shapeRenderer.identity();			
 			shapeRenderer.translate(x + w / 2, y + w / 2, 0);
 			shapeRenderer.rotate(0, 0, 1, angle);
 			shapeRenderer.rect(-w / 2, -w / 2, w, h);		
-		shapeRenderer.end();
+//		shapeRenderer.end();
 	}
 	
 	public void drawFilledRectangle(float x, float y, float w, float h, float angle, Color c) {
@@ -256,49 +309,41 @@ public class GdxGraphics implements Disposable
 	}
 	
 	public void drawCircle(float centerX, float centerY, float radius) {
-		shapeRenderer.begin(ShapeType.Line);		
-			shapeRenderer.identity();		
-			shapeRenderer.circle(centerX, centerY, radius);
-		shapeRenderer.end();		
+		checkmode(t_rendering_mode.SHAPE_LINE);		
+		shapeRenderer.identity(); // Useless ?		
+		shapeRenderer.circle(centerX, centerY, radius);
 	}
 
 	public void drawFilledCircle(float centerX, float centerY, float radius, Color c) {		
 		if(radius > 64)
 		{
-			shapeRenderer.begin(ShapeType.Filled);
+			checkmode(t_rendering_mode.SHAPE_FILLED);
+//			shapeRenderer.begin(ShapeType.Filled);
 				shapeRenderer.setColor(c);
 				shapeRenderer.identity();
 				shapeRenderer.circle(centerX, centerY, radius);
-			shapeRenderer.end();				
+//			shapeRenderer.end();				
 		}
 		else
 		{		
+			checkmode(t_rendering_mode.SPRITE);
 			// Use a sprite-based approach to rendering circle			
 			sprite.setScale(radius / 64.0f);
 			sprite.setPosition(centerX-64, centerY-64);
-			sprite.setColor(c);			
-			spriteBatch.begin();						
+			sprite.setColor(c);
+//			spriteBatch.begin();
 				sprite.draw(spriteBatch);
-			spriteBatch.end();			
+//			spriteBatch.end();			
 		}
 	}
 
 	public void drawString(float posX, float posY, String str) {
-		spriteBatch.begin();		
+		checkmode(t_rendering_mode.SPRITE);
+//		spriteBatch.begin();		
 			font.drawMultiLine(spriteBatch, str, posX, posY);
-		spriteBatch.end();
+//		spriteBatch.end();
 	}
-
-	@Deprecated
-	public void drawString(float posX, float posY, String str, Color color, float size) {
-		spriteBatch.begin();
-			font.setScale(size);		
-			font.setColor(color);		
-			font.drawMultiLine(spriteBatch, str, posX, posY);
-			font.setScale(1);
-		spriteBatch.end();
-	}
-
+	
 	/**
 	 * Draws a string with a specific font
 	 * @param posX
@@ -307,9 +352,10 @@ public class GdxGraphics implements Disposable
 	 * @param f
 	 */
 	public void drawString(float posX, float posY, String str, BitmapFont f){
-		spriteBatch.begin();
+		checkmode(t_rendering_mode.SPRITE);
+//		spriteBatch.begin();
 			f.drawMultiLine(spriteBatch, str, posX, posY);
-		spriteBatch.end();		
+//		spriteBatch.end();		
 	}
 	
 	/**
@@ -341,38 +387,16 @@ public class GdxGraphics implements Disposable
 	 * @param j y coordinate in the screen space
 	 */
 	public void drawBackground(Texture t, float i, float j){
-		spriteBatch.setProjectionMatrix(fixedcamera.combined);
-		
-		spriteBatch.begin();		
+		checkmode(t_rendering_mode.SPRITE);
+		spriteBatch.setProjectionMatrix(fixedcamera.combined);		
+//		spriteBatch.begin();		
 			spriteBatch.disableBlending();
 			spriteBatch.draw(t, i, j);
 			spriteBatch.enableBlending();
-		spriteBatch.end();
+//		spriteBatch.end();
 		
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
-			
-	/**
-	 * Draws a {@link Texture} directly on screen
-	 * @param t the texture to draw
-	 * @param i x position of the texture
-	 * @param j y position of the texture
-	 * @param blending if blending should be enable or not. For performance reasons, blending is preferrably
-	 * disabled for large texture if not required.
-	 * @deprecated Use {@link #drawAlphaPicture)
-	 */
-	@Deprecated
-	public void drawTexture(Texture t, int i, int j, boolean blending) {
-		spriteBatch.begin();		
-		if(!blending)
-			spriteBatch.disableBlending();
-		// Required for scrollings
-		spriteBatch.setProjectionMatrix(camera.combined);
-		spriteBatch.draw(t, i, j);		
-		if(!blending)
-			spriteBatch.enableBlending();		
-		spriteBatch.end();
-	}	
 
 	/**
 	 * Draws a picture at position ({@code posX, posY}).  
@@ -393,9 +417,10 @@ public class GdxGraphics implements Disposable
 	 * Draws a picture at position ({@code posX, posY}) with a fixed width and height (not the one of the {@link BitmapImage} itself).
 	 */
 	public void drawTransformedPicture(float posX, float posY, float angle, float width, float height, BitmapImage bitmap) {
-		spriteBatch.begin();
+		checkmode(t_rendering_mode.SPRITE);
+//		spriteBatch.begin();
 			spriteBatch.draw(bitmap.getRegion(), (float)posX-width, (float)posY-height, width, height, width*2, height*2, 1.0f, 1.0f,(float) angle);
-		spriteBatch.end();
+//		spriteBatch.end();
 	}
 	
 	/**
@@ -411,9 +436,10 @@ public class GdxGraphics implements Disposable
 	 * @param bitmap
 	 */
 	public void drawTransformedPicture(float posX, float posY, float centerX, float centerY, float angle, float scale, BitmapImage bitmap) {
-		spriteBatch.begin();			
+		checkmode(t_rendering_mode.SPRITE);
+//		spriteBatch.begin();			
 			spriteBatch.draw(bitmap.getRegion(), posX-bitmap.getRegion().getRegionWidth()/2, posY-bitmap.getRegion().getRegionHeight()/2, centerX, centerY, (float) bitmap.getImage().getWidth(), (float) bitmap.getImage().getHeight(), (float) scale, (float) scale,(float) angle);
-		spriteBatch.end();
+//		spriteBatch.end();
 	}
 
 	/**
@@ -442,16 +468,18 @@ public class GdxGraphics implements Disposable
 	}
 	
 	public void drawPolygon(Polygon p) {
-		shapeRenderer.begin(ShapeType.Line);
+		checkmode(t_rendering_mode.SHAPE_LINE);
+//		shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(currentColor);
 			shapeRenderer.identity();		
 			shapeRenderer.polygon(p.getVertices());
-		shapeRenderer.end();
+//		shapeRenderer.end();
 	}
 
 	public void drawFilledPolygon(Polygon polygon, Color c) {		
-		float[] vertices =  polygon.getEarClippedVertices();	
-		shapeRenderer.begin(ShapeType.Filled);
+		float[] vertices =  polygon.getEarClippedVertices();
+		checkmode(t_rendering_mode.SHAPE_FILLED);
+//		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(c);
 		shapeRenderer.identity();
 		
@@ -459,7 +487,7 @@ public class GdxGraphics implements Disposable
 			shapeRenderer.triangle(vertices[i], vertices[i+1], vertices[i+2], vertices[i+3], vertices[i+4], vertices[i+5]);
 		}		
 		
-		shapeRenderer.end();
+//		shapeRenderer.end();
 	}
 	
 	/****************************************************

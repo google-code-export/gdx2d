@@ -1,5 +1,8 @@
 package hevs.gdx2d.components.physics.utils;
 
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Declares useful physics simulation constants
  * for the box2d engine.
@@ -21,4 +24,12 @@ public class PhysicsConstants {
 	// Math constants
 	public static final float RAD_TO_DEG = (float)(180.0 / Math.PI);
 	public static final float DEG_TO_RAD = (float)(Math.PI / 180.0);
+	
+	public static Vector2 coordPixelsToMeters(Vector2 i){
+		return i.scl(PIXEL_TO_METERS);
+	}
+	
+	public static Vector2 coordMetersToPixels(Vector2 i){
+		return i.scl(METERS_TO_PIXELS);
+	}
 }

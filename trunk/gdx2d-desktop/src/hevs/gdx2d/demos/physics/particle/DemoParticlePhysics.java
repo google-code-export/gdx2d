@@ -28,15 +28,15 @@ public class DemoParticlePhysics extends PortableApplication {
 
 	// Particle creation related
 	boolean mouseActive = false;
-	public int CREATION_RATE = 2;
-	public final int MAX_AGE = 25;
+	public int CREATION_RATE = 3;
+	public final int MAX_AGE = 35;
 	Vector2 position;
 
 	@Override
 	public void onInit() {
 		setTitle("Particle physics, mui 2013");
 		dbgRenderer = new DebugRenderer();
-		world.setGravity(new Vector2(0,0));
+		world.setGravity(new Vector2(0,-0.6f));
 		Gdx.app.log("[DemoParticlePhysics]", "Click on screen to create particles");
 		Gdx.app.log("[DemoParticlePhysics]", "a/s change the creation rate of particles");
 	}

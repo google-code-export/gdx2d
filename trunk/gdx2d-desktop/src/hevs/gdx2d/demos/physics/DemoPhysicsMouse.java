@@ -74,12 +74,11 @@ public class DemoPhysicsMouse extends PortableApplication {
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
 		g.clear();
-		
 		debugRenderer.render(world, g.getCamera().combined);			
 		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
-		
-		g.drawSchoolLogoUpperRight();
 		g.drawFPS();
+		g.drawSchoolLogoUpperRight();
+		
 	}
 
 	protected Body hitBody = null;

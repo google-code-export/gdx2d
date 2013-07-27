@@ -51,6 +51,8 @@ public class DemoRotateLight extends PortableApplication {
 	@Override
 	public void onInit() {
 		this.setTitle("Rotate light demo, mui 2013");
+		Gdx.app.log("[DemoLights]", "Left click to move the light source");
+		
 		world = PhysicsWorld.getInstance();				
 
 		// We don't need gravity
@@ -114,6 +116,8 @@ public class DemoRotateLight extends PortableApplication {
 			p.setPosition((float)(rotationCenter.x), (float)(rotationCenter.y));
 		else
 			p.setPosition((float)(rotationCenter.x-radius+radius*Math.cos(angle)), (float)(rotationCenter.y+ radius*Math.sin(angle)));
+		
+		g.resetRenderingMode();
 		
 		// Update the light rays
 		rayHandler.updateAndRender();

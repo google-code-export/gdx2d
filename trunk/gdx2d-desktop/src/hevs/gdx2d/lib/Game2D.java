@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Game2D implements ApplicationListener {
 	protected PortableApplication app;
-	protected GdxGraphics g;
+	static public GdxGraphics g;
 
 	public OrthographicCamera camera;
 	protected ShapeRenderer shapeRenderer;

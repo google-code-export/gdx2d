@@ -54,6 +54,9 @@ public class DemoLight extends PortableApplication {
 		height = Gdx.graphics.getHeight();
 		setTitle("Shadows and lights, mui 2013");
 		
+		Gdx.app.log("[DemoLights]", "Left click to create a new light");
+		Gdx.app.log("[DemoLights]", "Right click disables normal light");
+		
 		world = PhysicsWorld.getInstance();
 		world.setGravity(new Vector2(0, 0));
 		
@@ -128,10 +131,12 @@ public class DemoLight extends PortableApplication {
 			final Vector2 pos = b.getBodyPosition();
 			g.drawFilledCircle(pos.x, pos.y, 12, Color.BLUE);			
 		}
+	
+		g.resetRenderingMode();
 		
 		// Render the lights		
 		rayHandler.updateAndRender();
-		
+
 		// Update the physics
 		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
 				

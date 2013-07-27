@@ -219,7 +219,6 @@ public abstract class PortableApplication implements TouchInterface,
 			// Not sure if usable
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			
-			// TODO refactor this more nicely
 			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 			config.resizable = false;
 			config.useGL20 = true;
@@ -228,12 +227,13 @@ public abstract class PortableApplication implements TouchInterface,
 			config.fullscreen = false;
 			config.title = "gdx2d application";
 			config.vSyncEnabled = true; // Ignored under Linux						
-			config.foregroundFPS = 120; // Target value if vSync not working
+			config.foregroundFPS = 60; // Target value if vSync not working
 			config.backgroundFPS = config.foregroundFPS;
 			config.samples = 2; // Multi-sampling enables anti-alias for lines
 			
 			String os = System.getProperty("os.name").toLowerCase();
 			
+			// Under windows, the icon *must* be the small one
 			if(os.contains("win")){						
 				config.addIcon("data/icon16.png", FileType.Internal);
 			}

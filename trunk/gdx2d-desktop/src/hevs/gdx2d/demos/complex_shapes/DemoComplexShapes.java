@@ -11,6 +11,7 @@ import java.util.Vector;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**
  * Performance demo animation rendering multiple circles at the same scale. This
@@ -21,7 +22,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class DemoComplexShapes extends PortableApplication {
 
-	private final int N_SHAPES = 101;
+	private final int N_SHAPES = 500;
 	private int screenWidth, screenHeight;
 	private int maxRadius;
 	private float angle = 0;
@@ -38,10 +39,10 @@ public class DemoComplexShapes extends PortableApplication {
 	// The image which will be displayed
 	private BitmapImage imageBmp;
 
-	Random rrand = new Random(12345);
-	Vector<Color> colors = new Vector<Color>();
-	Vector<DrawableShape> shapes = new Vector<DrawableShape>();
-	Vector<Integer> directions = new Vector<Integer>();
+	final Random rrand = new Random(12345);
+	final Vector<Color> colors = new Vector<Color>();
+	final Vector<DrawableShape> shapes = new Vector<DrawableShape>();
+	final Vector<Integer> directions = new Vector<Integer>();
 
 	/**
 	 * Create a nice color palette in the blue tones
@@ -100,12 +101,11 @@ public class DemoComplexShapes extends PortableApplication {
 		// Updates the counter for the position on screen
 		dir = counter > maxRadius || counter <= 5 ? dir *= -1 : dir;
 		counter += dir;
-
 		angle = angle >= 360 ? 0 : angle + 0.2f;
 
 		// Move the shapes on the screen
 		for (int i = 0; i < shapes.size(); i++) {
-			DrawableShape r = shapes.get(i);
+			final DrawableShape r = shapes.get(i);
 
 			if (r.x > screenWidth + imageBmp.getImage().getWidth() / 2 || r.x < 0) {
 				int val = directions.get(i);
@@ -119,8 +119,9 @@ public class DemoComplexShapes extends PortableApplication {
 		switch (shape_type) {
 		case CIRCLE:
 			g.clear(Color.BLACK);
-			for (DrawableShape i : shapes)
+			for (DrawableShape i : shapes){
 				g.drawFilledCircle(i.x, i.y, i.width, i.c);
+			}
 			break;
 		case IMAGE:
 			g.clear(new Color(0.9f, 0.9f, 0.9f, 1));
@@ -145,12 +146,12 @@ public class DemoComplexShapes extends PortableApplication {
 		switch (keycode) {
 		case Input.Keys.PLUS:
 			generateObjects(100);
-			Gdx.app.log("Info", "N shapes " + shapes.size());
+			Gdx.app.log("[DemoComplexShapes]", "N shapes " + shapes.size());
 			break;
 
 		case Input.Keys.MINUS:
 			if(shapes.size() > 100){
-				Gdx.app.log("Info", "N shapes " + shapes.size());
+				Gdx.app.log("[DemoComplexShapes]", "N shapes " + shapes.size());
 				destroyObjects(100);
 			}
 			break;

@@ -24,10 +24,9 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 
 /** 
- * TODO: not working anymore with refactored physics
  * A demo on how to use the mouse to move objects with box2d 
  * @author Pierre-André Mudry, mui 2013
- * @version 1.0
+ * @version 1.1
  */
 public class DemoPhysicsMouse extends PortableApplication {
 	World world = PhysicsWorld.getInstance();
@@ -59,8 +58,7 @@ public class DemoPhysicsMouse extends PortableApplication {
 		for(int i = 0; i < 10; i++){
 			Random r = new Random();
 			new PhysicsBox("box", new Vector2(100 + r.nextInt(100), 200 + r.nextInt(100)),
-							8, r.nextInt(40)+20,
-							1000f, 0.2f, 0.2f);
+							8, r.nextInt(40)+20,1000f, 0.2f, 0.2f);
 		}
 		
 		// Build the ball
@@ -76,6 +74,7 @@ public class DemoPhysicsMouse extends PortableApplication {
 		g.clear();
 		debugRenderer.render(world, g.getCamera().combined);			
 		PhysicsWorld.updatePhysics(Gdx.graphics.getDeltaTime());
+		
 		g.drawFPS();
 		g.drawSchoolLogoUpperRight();
 		
@@ -94,19 +93,6 @@ public class DemoPhysicsMouse extends PortableApplication {
 	 * GC
 	 **/
 	Vector2 testPoint = new Vector2();
-	
-	QueryCallback callback = new QueryCallback() {
-		@Override
-		public boolean reportFixture(Fixture fixture) {
-			// if the hit point is inside the fixture of the body we report it
-			if (fixture.testPoint(testPoint.x * PhysicsConstants.PIXEL_TO_METERS, testPoint.y * PhysicsConstants.PIXEL_TO_METERS)) {
-				hitBody = fixture.getBody();
-				return false;
-			} else
-				return true;
-		}
-	};
-
 	Vector2 target = new Vector2();
 
 	@Override
@@ -129,6 +115,19 @@ public class DemoPhysicsMouse extends PortableApplication {
 		}
 	}
 
+	// Called for AABB lookup
+	QueryCallback callback = new QueryCallback() {
+		@Override
+		public boolean reportFixture(Fixture fixture) {
+			// if the hit point is inside the fixture of the body we report it
+			if (fixture.testPoint(testPoint.x, testPoint.y)) {
+				hitBody = fixture.getBody();
+				return false;
+			} else
+				return true;
+		}
+	};
+
 	public void onClick(int x, int y, int button) {
 		// translate the mouse coordinates to world coordinates
 		// cam.unproject(testPoint.set(x, y, 0));
@@ -136,16 +135,15 @@ public class DemoPhysicsMouse extends PortableApplication {
 		testPoint.y = y;
 		
 		testPoint.scl(PhysicsConstants.PIXEL_TO_METERS);
-
+		
 		// ask the world which bodies are within the given
 		// bounding box around the mouse pointer
 		hitBody = null;
 
-		world.QueryAABB(callback, testPoint.x - 0.1f,
-				testPoint.y - 0.1f, testPoint.x + 0.1f, testPoint.y + 0.1f);		
+		world.QueryAABB(callback, testPoint.x - 5, testPoint.y - 5, testPoint.x + 5, testPoint.y + 5);		
 		
 		// ignore kinematic bodies, they don't work with the mouse joint
-		if (hitBody != null && hitBody.getType() == BodyType.KinematicBody)
+		if (hitBody == null || hitBody.getType() == BodyType.KinematicBody)
 			return;
 
 		// if we hit something we create a new mouse joint
@@ -174,5 +172,4 @@ public class DemoPhysicsMouse extends PortableApplication {
 	public static void main(String[] args) {
 		new DemoPhysicsMouse(false, 800, 500);
 	}
-
 }

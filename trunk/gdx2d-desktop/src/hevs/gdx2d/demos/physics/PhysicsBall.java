@@ -36,14 +36,16 @@ public class PhysicsBall extends PhysicsCircle implements DrawableObject{
 		
 	@Override
 	public void draw(GdxGraphics g) {
-		// We have to convert meters (physics) to pixels (display)
 		Vector2 position = getBodyPosition(); 
 		float radius = getBodyRadius();
 		
 		if(transparentRendering)
 			g.drawCircle(position.x, position.y, radius);
-		else
-			g.drawFilledCircle(position.x, position.y, radius, c);
+		else{			
+			g.drawCircle(position.x, position.y, radius, Color.BLACK);
+			g.drawFilledCircle(position.x, position.y, radius-1, c);
+//			g.drawFilledBorderedCircle(position.x, position.y, radius, c, Color.BLACK);
+		}
 			
 	}
 	

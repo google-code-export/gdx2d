@@ -11,7 +11,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -31,7 +31,8 @@ public class DemoChainPhysics extends PortableApplication {
 	World w;
 	PhysicsChain chain;
 	
-	final int GENERATION_RATE = 5;
+	// The rate at which the balls are generated
+	int GENERATION_RATE = 7;
 	
 	float width, height;
 	boolean generate = false;
@@ -43,6 +44,7 @@ public class DemoChainPhysics extends PortableApplication {
 		Gdx.app.log("[DemoChainPhysics]", "Left click to generate balls");
 		Gdx.app.log("[DemoChainPhysics]", "Right click to generate random terrain");
 		Gdx.app.log("[DemoChainPhysics]", "Middle click to generate Catmull-Rom terrain");
+		Gdx.app.log("[DemoChainPhysics]", "'r' to modify rendering type");
 		
 		w = PhysicsWorld.getInstance();
 		
@@ -56,10 +58,7 @@ public class DemoChainPhysics extends PortableApplication {
 
 	@Override
 	public void onGraphicRender(GdxGraphics g) {
-		
-		// Standard stuff
-		g.clear();
-		
+		g.clear(Color.LIGHT_GRAY);
 		chain.draw(g);
 	
 		// Draws the balls
@@ -123,6 +122,14 @@ public class DemoChainPhysics extends PortableApplication {
 	}
 	
 	@Override
+	public void onTap(float x, float y, int count, int button) {
+		super.onTap(x, y, count, button);
+		if(count == 2){
+			chain.catmull_chain(5);
+		}
+	}
+	
+	@Override
 	public void onRelease(int x, int y, int button) {
 		super.onRelease(x, y, button);
 		generate = false;
@@ -130,6 +137,9 @@ public class DemoChainPhysics extends PortableApplication {
 	
 	public DemoChainPhysics(boolean onAndroid) {
 		super(onAndroid);
+		
+		if(onAndroid)
+			GENERATION_RATE = 3;
 	}
 
 	public DemoChainPhysics(int w, int h) {

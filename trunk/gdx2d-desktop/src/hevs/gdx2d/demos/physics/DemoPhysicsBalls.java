@@ -53,6 +53,7 @@ public class DemoPhysicsBalls extends PortableApplication {
 		img = new BitmapImage("data/images/soccer.png");
 	}
 
+	
 	/**
 	 * Adds a ball at a given location
 	 * @param x
@@ -71,6 +72,7 @@ public class DemoPhysicsBalls extends PortableApplication {
 		// Add the ball to the list of existing balls
 		list.add(b);
 	}
+	
 	
 	@Override
 	public void onClick(int x, int y, int button) {

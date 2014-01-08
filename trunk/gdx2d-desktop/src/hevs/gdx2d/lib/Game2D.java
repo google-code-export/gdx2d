@@ -49,7 +49,7 @@ public class Game2D implements ApplicationListener {
 
 		// Log level for the application
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		Gdx.app.log("[GDX2Dlib]", "Version " + Version.version);
+		Gdx.app.log("[GDX2Dlib]", "Version " + Version.version + " / mui, chn");
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(),

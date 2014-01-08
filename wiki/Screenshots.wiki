@@ -1,5 +1,8 @@
 #summary Some picture demonstrating what the library can do. All those demos are available in the framework.
 
+=*THIS PAGE IS NO LONGER MAINTAINED, PLEASE GO TO https://github.com/pmudry/gdx2d FOR AN UP TO DATE VERSION*=
+
+
 = Scrolling =
 Demonstrates how to pan the camera to make a scrolling.
 

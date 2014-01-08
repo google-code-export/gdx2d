@@ -1,5 +1,8 @@
 #summary Definition of words used in the library
 
+=*THIS PAGE IS NO LONGER MAINTAINED, PLEASE GO TO https://github.com/pmudry/gdx2d FOR AN UP TO DATE VERSION*=
+
+
 =Definition of physics terms=
 
   * _World_: Manages the physics simulation. It knows everything about the overall coordinate space and also stores lists of every element in the world. The world has the gravity. To get an instance from every class, you can use PhysicsWorld.getInstance();

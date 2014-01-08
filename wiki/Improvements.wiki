@@ -1,3 +1,6 @@
+=*THIS PAGE IS NO LONGER MAINTAINED, PLEASE GO TO https://github.com/pmudry/gdx2d FOR AN UP TO DATE VERSION*=
+
+
 =Planned improvements for release 1.0=
 
 == New demos ==
